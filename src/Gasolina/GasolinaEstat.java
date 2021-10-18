@@ -48,12 +48,13 @@ public class GasolinaEstat {
 
     // per cada cisterna assignem totes les peticions possibles fins que ja no li quedin viatges i passem a la seguent
     public void generarEstatSolucio1() {
+        int nPeticions = peticions.size();
 
         for (int i = 0; i < cisternes.size(); ++i) {
 
                 Cisterna c = cisternes.get(i);
 
-                for (int j = 0; j < peticions.size(); ++j) {
+                for (int j = 0; j < nPeticions; ++j) {
 
                     Peticio p = peticions.get(j);
 
@@ -97,7 +98,10 @@ public class GasolinaEstat {
                             }
 
                         }
-
+                        if (nPeticions != peticions.size())  {
+                            j -= 1;
+                            nPeticions = peticions.size();
+                        }
                     }
 
                 }
@@ -121,6 +125,10 @@ public class GasolinaEstat {
 
             }
         }
+
+    }
+
+    public void generaEstatSolucio2() {
 
     }
 

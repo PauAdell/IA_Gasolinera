@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) {
-        GasolinaEstat estat = new GasolinaEstat(15, 1234, 4, 28);
+        GasolinaEstat estat = new GasolinaEstat(15, 1234, 4, 20);
         estat.generarEstatSolucio1();
         estat.imprimirEstat();
         //System.out.println("Hola bon dia");
