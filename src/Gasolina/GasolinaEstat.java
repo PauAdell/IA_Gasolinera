@@ -29,8 +29,9 @@ public class GasolinaEstat {
 
         cisternes = new ArrayList<Cisterna>(nCent);
         for (int i = 0; i < nCent; ++i) {
-            Cisterna aux = new Cisterna(centres.get(i).getCoordX(), centres.get(i).getCoordY());
+            Cisterna aux = new Cisterna(centres.get(i).getCoordX(), centres.get(i).getCoordX());
             cisternes.add( aux );
+            System.out.println("Centre: " + centres.get(i).getCoordX() + "," + centres.get(i).getCoordX());
         }
 
         peticions = new ArrayList<Peticio>();
@@ -38,12 +39,14 @@ public class GasolinaEstat {
             for (int j = 0; j < gaso.get(i).getPeticiones().size(); ++j) {
                 Peticio aux = new Peticio(gaso.get(i).getCoordX(), gaso.get(i).getCoordY(), gaso.get(i).getPeticiones().get(j));
                 peticions.add( aux );
+                System.out.println("Gaso: " + gaso.get(i).getCoordX() + "," + gaso.get(i).getCoordY());
+                System.out.println("Peticio: " + aux.getPos().getCoordX() + "," + aux.getPos().getCoordY());
             }
         }
 
     }
 
-    // per cada cisterna assignem totes les peticions possibles fins que ja no li quedin viatges
+    // per cada cisterna assignem totes les peticions possibles fins que ja no li quedin viatges i passem a la seguent
     public void generarEstatSolucio1() {
 
         for (int i = 0; i < cisternes.size(); ++i) {
@@ -54,9 +57,9 @@ public class GasolinaEstat {
 
                     Peticio p = peticions.get(j);
 
-                    int dist = c.getDist() + 2 * calcularDistancia(c.getPos(), c.getCentre());
+                    int dist = c.getDist() + calcularDistancia(c.getPos(), p.getPos()) + calcularDistancia(p.getPos(), c.getCentre());
 
-                    if (c.getViatges() <= v && dist <= k) {          // si v <= 5 && d <= 640
+                    if (c.getViatges() <= v && dist <= k) {
 
                         if (c.getTancs() == 0) {             // si els tancs estan buits tornem al centre
 
@@ -73,6 +76,10 @@ public class GasolinaEstat {
                             int distGaso = calcularDistancia(c.getPos(), p.getPos());
                             int distReco = c.getDist();
                             int distTornada = calcularDistancia(p.getPos(), c.getCentre());
+
+                            System.out.print("Camio: " + i + " esta a (" + c.getPos().getCoordX() + "," + c.getPos().getCoordY());
+                            System.out.print(") vol anar a (" + p.getPos().getCoordX() + "," + p.getPos().getCoordY());
+                            System.out.println(") a una distancia " + distGaso + " amb tornada " + distTornada + " ha recorregut " + distReco );
 
                             if (distGaso + distReco + distTornada < k) {
 
@@ -104,11 +111,31 @@ public class GasolinaEstat {
         }
     }
 
+    public void generarEstatSolucio2() {
+
+        Collections.sort(peticions, new CustomComparator());        // ordre ascendent per dia
+
+        for (int i = 0; i < cisternes.size(); ++i) {
+
+            for (int j = 0; j < gaso.size(); ++j) {
+
+            }
+        }
+
+    }
+
     public void imprimirEstat() {
         for (int i = 0; i < cisternes.size(); ++i) {
             System.out.println("Camio: " + i + "   Distancia: " + cisternes.get(i).getDist() + "   Viatges: " + cisternes.get(i).getViatges() + "   Entregues: " + cisternes.get(i).getEntregues());
         }
-        System.out.println("Num de peticions restants: " + peticions.size());
+
+        System.out.println("Num de peticions restants: " + peticions.size() );
+
+        for (int i = 0; i < peticions.size(); ++i) {
+            System.out.print("Dia: " + peticions.get(i).getDia());
+            System.out.println(" pos: (" + peticions.get(i).getPos().getCoordX() + "," + peticions.get(i).getPos().getCoordY() + ")");
+        }
+
         System.out.println("Beneficis: " + benefici);
 
     }
