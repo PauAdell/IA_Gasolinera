@@ -50,14 +50,8 @@ public class Cisterna {
         this.tancs = newTancs;
     }
 
-    public void setPos(int CoordX, int CoordY) {
-        this.pos.setCoordX(CoordX);
-        this.pos.setCoordY(CoordY);
-    }
-
-    public void setPosGaso(int CoordX, int CoordY) {
-        this.centre.setCoordX(CoordX);
-        this.centre.setCoordY(CoordY);
+    public void setPos( Posicio p) {
+        pos = p;
     }
 
 }

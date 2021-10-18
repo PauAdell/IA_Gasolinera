@@ -10,9 +10,9 @@ import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) {
-        GasolinaEstat e = new GasolinaEstat(12, 4, 5, 6);
-        e.generarEstatInicial1();
-        e.imprimirEstat();
+        GasolinaEstat estat = new GasolinaEstat(12, 1234, 5, 6);
+        estat.generarEstatSolucio1();
+        estat.imprimirEstat();
         System.out.println("Hola bon dia");
     }
 }
