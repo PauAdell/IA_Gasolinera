@@ -9,10 +9,13 @@ import java.util.*;
 
 public class GasolinaEstat {
 
+    public static int K;
+    public static int V;
     public static Gasolineras Gaso;
     public static CentrosDistribucion Centres;
+    private int nPeticions;
+    private int Economia;
     private ArrayList<Distribucion> Camions;
-    private ArrayList<Integer> visitedGaso;
 
     private int peticionsTotal;
 
@@ -20,13 +23,8 @@ public class GasolinaEstat {
         Gaso = new Gasolineras(nGaso, seed);
         Centres = new CentrosDistribucion(nCent, mult, seed);
         Camions = new ArrayList<Distribucion>();
-        visitedGaso = new ArrayList<Integer>();
         for (int i = 0; i < Centres.size(); i++){
             Camions.add(Centres.get(i));                    // Camions[i] = Centres[i]
-        }
-
-        for (int i = 0; i < Centres.size(); i++) {
-            visitedGaso.add(i, 0);
         }
 
         for (int i = 0; i < Gaso.size(); i++) {
@@ -41,20 +39,7 @@ public class GasolinaEstat {
     }
 
     public void generarEstatInicial1() {            // solucio pocha
-        for (int i = 0; i < Camions.size(); i++) {
-            if (visitedGaso.get(i) < 2) {
-                for (int j = 0; j < Gaso.size(); j++) {
-                    if (Gaso.get(j).getPeticiones().size() > 0) {
-                        setDestinacio(Camions.get(i), Gaso.get(j).getCoordX(), Gaso.get(j).getCoordY());
-                        visitedGaso.set(i, visitedGaso.get(i)+1);
-                    }
-                }
-            }
-            else {
-                setDestinacio(Camions.get(i), Centres.get(i).getCoordX(), Centres.get(i).getCoordY());
-                visitedGaso.set(i, 0);
-            }
-        }
+
     }
 
     public void generarEstatInicial2() {            // solucio millor
