@@ -15,8 +15,6 @@ public class GasolinaEstat {
     public static int k;
     public static int v;
 
-    private int entregues;
-
     private int benefici;
 
     private ArrayList<Cisterna> cisternes;
@@ -28,7 +26,6 @@ public class GasolinaEstat {
         k = 640;
         v = 5;
         benefici = 0;
-        entregues = 0;
 
         cisternes = new ArrayList<Cisterna>(nCent);
         for (int i = 0; i < nCent; ++i) {
@@ -51,65 +48,69 @@ public class GasolinaEstat {
 
         for (int i = 0; i < cisternes.size(); ++i) {
 
+                Cisterna c = cisternes.get(i);
+
                 for (int j = 0; j < peticions.size(); ++j) {
 
-                    int dist = cisternes.get(i).getDist() + 2* calcularDistancia(cisternes.get(i).getPos(), cisternes.get(i).getCentre());
+                    Peticio p = peticions.get(j);
 
-                    if (cisternes.get(i).getViatges() <= v && dist <= k) {          // si v <= 5 && d <= 640
+                    int dist = c.getDist() + 2 * calcularDistancia(c.getPos(), c.getCentre());
 
-                        if (cisternes.get(i).getTancs() == 0) {             // si els tancs estan buits tornem al centre
+                    if (c.getViatges() <= v && dist <= k) {          // si v <= 5 && d <= 640
 
-                            cisternes.get(i).setViatges(cisternes.get(i).getViatges() + 1);
-                            cisternes.get(i).setTancs(2);
+                        if (c.getTancs() == 0) {             // si els tancs estan buits tornem al centre
 
-                            int distNova = cisternes.get(i).getDist() + calcularDistancia(cisternes.get(i).getPos(), cisternes.get(i).getCentre());
-                            cisternes.get(i).setPos(cisternes.get(i).getCentre());
-                            cisternes.get(i).setDist(distNova);
+                            c.setViatges(c.getViatges() + 1);
+                            c.setTancs(2);
+
+                            int distNova = c.getDist() + calcularDistancia(c.getPos(), c.getCentre());
+                            c.setPos(c.getCentre());
+                            c.setDist(distNova);
                         }
 
                         else {          // tancs > 0
-                            ++entregues;
 
-                            int distNova = cisternes.get(i).getDist() + calcularDistancia(cisternes.get(i).getPos(), peticions.get(j).getPos());
-                            //System.out.println("Distancia cist: " + cisternes.get(i).getDist() + " Calcul distanci: " + distNova)
+                            int distGaso = calcularDistancia(c.getPos(), p.getPos());
+                            int distReco = c.getDist();
+                            int distTornada = calcularDistancia(p.getPos(), c.getCentre());
 
-                            cisternes.get(i).setDist(distNova);
-                            cisternes.get(i).setTancs(cisternes.get(i).getTancs() - 1);
+                            if (distGaso + distReco + distTornada < k) {
 
-                            cisternes.get(i).setPos(peticions.get(j).getPos());
-                            int d = peticions.get(j).getDia();
+                                c.setDist(c.getDist() + distGaso);
+                                c.setTancs(c.getTancs() - 1);
 
-                            benefici += 1000 * ((100 - Math.pow(2.0, d))/100);
+                                c.setPos(p.getPos());
+                                int d = p.getDia();
 
+                                c.setEntregues(c.getEntregues() + 1);
 
-                            peticions.remove(j);
+                                benefici += 1000 * ((100 - Math.pow(2.0, d)) / 100);
+
+                                peticions.remove(j);
+                            }
 
                         }
 
                     }
 
                 }
-                benefici -= 2 * cisternes.get(i).getDist();
+                if (c.getPos().getCoordX() != c.getCentre().getCoordX() && c.getPos().getCoordY() != c.getCentre().getCoordY()) {
+                    int dist = calcularDistancia(c.getPos(), c.getCentre());
+                    c.setDist(c.getDist() + dist);
+                    c.setPos(c.getCentre());
+                    c.setViatges(c.getViatges() + 1);
+                }
+                benefici -= 2 * c.getDist();
         }
     }
 
     public void imprimirEstat() {
         for (int i = 0; i < cisternes.size(); ++i) {
-            System.out.println("Camio: " + i + "   Distancia: " + cisternes.get(i).getDist() + "   Viatges: " + cisternes.get(i).getViatges());
+            System.out.println("Camio: " + i + "   Distancia: " + cisternes.get(i).getDist() + "   Viatges: " + cisternes.get(i).getViatges() + "   Entregues: " + cisternes.get(i).getEntregues());
         }
         System.out.println("Num de peticions restants: " + peticions.size());
         System.out.println("Beneficis: " + benefici);
-        System.out.println("Entregues: " + entregues);
-        /*
 
-        System.out.println("Informacio Cisternes: ");
-        for (int i = 0; i < cisternes.size(); ++i) {
-            System.out.println("Viatges: " + cisternes.get(i).getViatges() + " Distancia: " + cisternes.get(i).getDist());
-        }
-        System.out.println("Informacio Peticions: " + peticions.size());
-        for (int i = 0; i < peticions.size(); ++i) {
-            System.out.println("Dia: " + peticions.get(i).getDia());
-        }*/
     }
 
     private int calcularDistancia(Posicio centre, Posicio gasolinera) {
