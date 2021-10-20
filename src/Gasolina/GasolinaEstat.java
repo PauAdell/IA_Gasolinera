@@ -17,8 +17,9 @@ public class GasolinaEstat {
 
     private int benefici;
 
+    private Cisterna fantasma;
+
     private ArrayList<Cisterna> cisternes;
-    private ArrayList<Peticio> peticions;
 
     public GasolinaEstat(int nGaso, int seed, int nCent, int mult) {
         gaso = new Gasolineras(nGaso, seed);
@@ -34,12 +35,13 @@ public class GasolinaEstat {
             System.out.println("Centre: " + centres.get(i).getCoordX() + "," + centres.get(i).getCoordX());
         }
 
-        peticions = new ArrayList<Peticio>();
+        fantasma = new Cisterna (0, 0);
+
         for (int i = 0; i < nGaso; ++i) {
             for (int j = 0; j < gaso.get(i).getPeticiones().size(); ++j) {
                 Peticio aux = new Peticio(gaso.get(i).getCoordX(), gaso.get(i).getCoordY(), gaso.get(i).getPeticiones().get(j));
-                peticions.add( aux );
-                System.out.println("Gaso: " + gaso.get(i).getCoordX() + "," + gaso.get(i).getCoordY());
+                fantasma.addPeticioARecorregut(aux);
+                //System.out.println("Gaso: " + gaso.get(i).getCoordX() + "," + gaso.get(i).getCoordY());
                 System.out.println("Peticio: " + aux.getPos().getCoordX() + "," + aux.getPos().getCoordY());
             }
         }
@@ -48,7 +50,7 @@ public class GasolinaEstat {
 
     // per cada cisterna assignem totes les peticions possibles fins que ja no li quedin viatges i passem a la seguent
     public void generarEstatSolucio1() {
-        int nPeticions = peticions.size();
+        int nPeticions = fantasma.getRecorregut().size();
 
         for (int i = 0; i < cisternes.size(); ++i) {
 
@@ -56,7 +58,7 @@ public class GasolinaEstat {
 
                 for (int j = 0; j < nPeticions; ++j) {
 
-                    Peticio p = peticions.get(j);
+                    Peticio p = fantasma.getPeticio(j);
 
                     int dist = c.getDist() + calcularDistancia(c.getPos(), p.getPos()) + calcularDistancia(p.getPos(), c.getCentre());
 
@@ -78,9 +80,9 @@ public class GasolinaEstat {
                             int distReco = c.getDist();
                             int distTornada = calcularDistancia(p.getPos(), c.getCentre());
 
-                            System.out.print("Camio: " + i + " esta a (" + c.getPos().getCoordX() + "," + c.getPos().getCoordY());
-                            System.out.print(") vol anar a (" + p.getPos().getCoordX() + "," + p.getPos().getCoordY());
-                            System.out.println(") a una distancia " + distGaso + " amb tornada " + distTornada + " ha recorregut " + distReco );
+                            //System.out.print("Camio: " + i + " esta a (" + c.getPos().getCoordX() + "," + c.getPos().getCoordY());
+                            //System.out.print(") vol anar a (" + p.getPos().getCoordX() + "," + p.getPos().getCoordY());
+                            //System.out.println(") a una distancia " + distGaso + " amb tornada " + distTornada + " ha recorregut " + distReco );
 
                             if (distGaso + distReco + distTornada < k) {
 
@@ -93,14 +95,14 @@ public class GasolinaEstat {
                                 c.setEntregues(c.getEntregues() + 1);
 
                                 benefici += 1000 * ((100 - Math.pow(2.0, d)) / 100);
-
-                                peticions.remove(j);
+                                c.addPeticioARecorregut(p);
+                                fantasma.removePeticio(j);
                             }
 
                         }
-                        if (nPeticions != peticions.size())  {
+                        if (nPeticions != fantasma.getRecorregut().size())  {
                             j -= 1;
-                            nPeticions = peticions.size();
+                            nPeticions = fantasma.getRecorregut().size();
                         }
                     }
 
@@ -116,8 +118,6 @@ public class GasolinaEstat {
     }
 
     public void generarEstatSolucio2() {
-
-        Collections.sort(peticions, new CustomComparator());        // ordre ascendent per dia
 
         for (int i = 0; i < cisternes.size(); ++i) {
 
@@ -135,13 +135,18 @@ public class GasolinaEstat {
     public void imprimirEstat() {
         for (int i = 0; i < cisternes.size(); ++i) {
             System.out.println("Camio: " + i + "   Distancia: " + cisternes.get(i).getDist() + "   Viatges: " + cisternes.get(i).getViatges() + "   Entregues: " + cisternes.get(i).getEntregues());
+            System.out.println("Vector de Peticions que fa el camio : ");
+            for (int j = 0; j < cisternes.get(i).getRecorregut().size(); ++j) {
+                System.out.print("Dia: " + cisternes.get(i).getPeticio(j).getDia());
+                System.out.println(" pos: (" + cisternes.get(i).getPeticio(j).getPos().getCoordX() + "," + cisternes.get(i).getPeticio(j).getPos().getCoordY() + ")");
+            }
         }
 
-        System.out.println("Num de peticions restants: " + peticions.size() );
+        System.out.println("Num de peticions restants: " + fantasma.getRecorregut().size() );
 
-        for (int i = 0; i < peticions.size(); ++i) {
-            System.out.print("Dia: " + peticions.get(i).getDia());
-            System.out.println(" pos: (" + peticions.get(i).getPos().getCoordX() + "," + peticions.get(i).getPos().getCoordY() + ")");
+        for (int i = 0; i < fantasma.getRecorregut().size(); ++i) {
+            System.out.print("Dia: " + fantasma.getPeticio(i).getDia());
+            System.out.println(" pos: (" + fantasma.getPeticio(i).getPos().getCoordX() + "," + fantasma.getPeticio(i).getPos().getCoordY() + ")");
         }
 
         System.out.println("Beneficis: " + benefici);
