@@ -6,7 +6,7 @@ public class Cisterna {
 
     private Posicio pos;
     private Posicio centre;
-    ArrayList<Peticio> recorregut;
+    ArrayList<Posicio> recorregut;
     private int dist;
     private int viatges;
     private int tancs;
@@ -14,9 +14,9 @@ public class Cisterna {
     private int entregues;
 
     public Cisterna( int CoordX, int CoordY) {
-        pos = new Posicio( CoordX, CoordY);
-        centre = new Posicio( CoordX, CoordY);
-        recorregut = new ArrayList<Peticio>();
+        pos = new Posicio( CoordX, CoordY, -1);
+        centre = new Posicio( CoordX, CoordY, -1);
+        recorregut = new ArrayList<Posicio>();
         dist = 0;
         viatges = 0;
         tancs = 2;
@@ -39,7 +39,7 @@ public class Cisterna {
 
     public ArrayList getRecorregut() {return recorregut;}
 
-    public Peticio getPeticio( int i ) { return recorregut.get(i);};
+    public Posicio getPosicioRecorregut( int i ) { return recorregut.get(i);};
 
     public void setEntregues(int e) {entregues = e;}
 
@@ -67,15 +67,14 @@ public class Cisterna {
         pos = p;
     }
 
-    public void addPeticioARecorregut ( Peticio p) {
+    public void addPosicioARecorregut ( Posicio p) {
         recorregut.add(p);
     }
 
     public void removePeticio( int i ) { recorregut.remove(i);}
 
-    public void setPeticio ( Peticio a, Peticio b) {
-        int aux = recorregut.indexOf(a);
-        recorregut.set(aux, b);
+    public void setPosicioARecorregut ( int i, Posicio b) {
+        recorregut.set(i, b);
     }
 
 

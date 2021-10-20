@@ -6,7 +6,7 @@ public class Peticio {
 
     public Peticio(int cx, int cy, int d) {
         dia = d;
-        posGaso = new Posicio( cx, cy);
+        posGaso = new Posicio( cx, cy, dia);
     }
 
     public int getDia() {

@@ -35,19 +35,20 @@ public class GasolinaEstat {
             System.out.println("Centre: " + centres.get(i).getCoordX() + "," + centres.get(i).getCoordX());
         }
 
-        fantasma = new Cisterna (0, 0);
+        fantasma = new Cisterna (-1, -1);
 
         for (int i = 0; i < nGaso; ++i) {
             for (int j = 0; j < gaso.get(i).getPeticiones().size(); ++j) {
-                Peticio aux = new Peticio(gaso.get(i).getCoordX(), gaso.get(i).getCoordY(), gaso.get(i).getPeticiones().get(j));
-                fantasma.addPeticioARecorregut(aux);
+                Posicio aux = new Posicio(gaso.get(i).getCoordX(), gaso.get(i).getCoordY(), gaso.get(i).getPeticiones().get(j));
+                fantasma.addPosicioARecorregut(aux);
                 //System.out.println("Gaso: " + gaso.get(i).getCoordX() + "," + gaso.get(i).getCoordY());
-                System.out.println("Peticio: " + aux.getPos().getCoordX() + "," + aux.getPos().getCoordY());
+                //System.out.println("Peticio: " + aux.getCoordX() + "," + aux.getCoordY());
             }
         }
 
     }
 
+    /*
     // per cada cisterna assignem totes les peticions possibles fins que ja no li quedin viatges i passem a la seguent
     public void generarEstatSolucio1() {
         int nPeticions = fantasma.getRecorregut().size();
@@ -58,7 +59,7 @@ public class GasolinaEstat {
 
                 for (int j = 0; j < nPeticions; ++j) {
 
-                    Peticio p = fantasma.getPeticio(j);
+                    Posicio p = fantasma.getPeticio(j);
 
                     int dist = c.getDist() + calcularDistancia(c.getPos(), p.getPos()) + calcularDistancia(p.getPos(), c.getCentre());
 
@@ -117,41 +118,7 @@ public class GasolinaEstat {
         }
     }
 
-    public void generarEstatSolucio2() {
-
-        for (int i = 0; i < cisternes.size(); ++i) {
-
-            for (int j = 0; j < gaso.size(); ++j) {
-
-            }
-        }
-
-    }
-
-    public void generaEstatSolucio2() {
-
-    }
-
-    public void imprimirEstat() {
-        for (int i = 0; i < cisternes.size(); ++i) {
-            System.out.println("Camio: " + i + "   Distancia: " + cisternes.get(i).getDist() + "   Viatges: " + cisternes.get(i).getViatges() + "   Entregues: " + cisternes.get(i).getEntregues());
-            System.out.println("Vector de Peticions que fa el camio : ");
-            for (int j = 0; j < cisternes.get(i).getRecorregut().size(); ++j) {
-                System.out.print("Dia: " + cisternes.get(i).getPeticio(j).getDia());
-                System.out.println(" pos: (" + cisternes.get(i).getPeticio(j).getPos().getCoordX() + "," + cisternes.get(i).getPeticio(j).getPos().getCoordY() + ")");
-            }
-        }
-
-        System.out.println("Num de peticions restants: " + fantasma.getRecorregut().size() );
-
-        for (int i = 0; i < fantasma.getRecorregut().size(); ++i) {
-            System.out.print("Dia: " + fantasma.getPeticio(i).getDia());
-            System.out.println(" pos: (" + fantasma.getPeticio(i).getPos().getCoordX() + "," + fantasma.getPeticio(i).getPos().getCoordY() + ")");
-        }
-
-        System.out.println("Beneficis: " + benefici);
-
-    }
+     */
 
     private int calcularDistancia(Posicio centre, Posicio gasolinera) {
 
@@ -160,6 +127,102 @@ public class GasolinaEstat {
 
         return coordX + coordY;
 
+    }
+
+    public boolean swapPetitions (Cisterna a, Cisterna b, int x , int y) {
+
+        if ( a.getPos().getCoordX() == -1 &&  a.getPos().getCoordY() == -1) {
+            int distB = 0;
+            for (int i = 1; i < b.getRecorregut().size(); ++i) {
+                if ( i == x ) distB += calcularDistancia( b.getPosicioRecorregut(i-1), a.getPosicioRecorregut(x));
+                else if ( i == x+1 ) distB += calcularDistancia( a.getPosicioRecorregut(x), b.getPosicioRecorregut(i));
+                else distB += calcularDistancia( b.getPosicioRecorregut(i-1), b.getPosicioRecorregut(i));
+            }
+            if ( distB < k) {
+                int distBAux = 2 * (calcularDistancia( b.getPosicioRecorregut(y-1), b.getPosicioRecorregut(y)) + calcularDistancia( b.getPosicioRecorregut(y), b.getPosicioRecorregut(y+1)));
+                Posicio aux = new Posicio(a.getPosicioRecorregut(x));
+                a.setPosicioARecorregut(x, b.getPosicioRecorregut(y));
+                b.setPosicioARecorregut(y, aux);
+                b.setDist(distB);
+                benefici -= (distBAux);
+                distBAux = 2 * (calcularDistancia( b.getPosicioRecorregut(y-1), b.getPosicioRecorregut(y)) + calcularDistancia( b.getPosicioRecorregut(y), b.getPosicioRecorregut(y+1)));
+                benefici += (distBAux);
+                return true;
+            }
+            return false;
+        } else if ( b.getPos().getCoordX() == -1 &&  b.getPos().getCoordY() == -1) {
+            int distA = 0;
+            for (int i = 1; i < a.getRecorregut().size(); ++i) {
+                if ( i == x ) distA += calcularDistancia( a.getPosicioRecorregut(i-1), b.getPosicioRecorregut(y));
+                else if ( i == x+1 ) distA += calcularDistancia( b.getPosicioRecorregut(y), a.getPosicioRecorregut(i));
+                else distA += calcularDistancia( a.getPosicioRecorregut(i-1), a.getPosicioRecorregut(i));
+            }
+            if ( distA < k) {
+                int distAAux = 2 * (calcularDistancia( a.getPosicioRecorregut(x-1), a.getPosicioRecorregut(x)) + calcularDistancia( a.getPosicioRecorregut(x), a.getPosicioRecorregut(x+1)));
+                Posicio aux = new Posicio(a.getPosicioRecorregut(x));
+                a.setPosicioARecorregut(x, b.getPosicioRecorregut(y));
+                b.setPosicioARecorregut(y, aux);
+                b.setDist(distA);
+                benefici -= (distAAux);
+                distAAux = 2 * (calcularDistancia( a.getPosicioRecorregut(x-1), a.getPosicioRecorregut(x)) + calcularDistancia( a.getPosicioRecorregut(x), a.getPosicioRecorregut(x+1)));
+                benefici += (distAAux);
+                return true;
+            }
+            return false;
+        } else {
+            int distA = 0;
+            for (int i = 1; i < a.getRecorregut().size(); ++i) {
+                if (i == x) distA += calcularDistancia(a.getPosicioRecorregut(i - 1), b.getPosicioRecorregut(y));
+                else if (i == x + 1) distA += calcularDistancia(b.getPosicioRecorregut(y), a.getPosicioRecorregut(i));
+                else distA += calcularDistancia(a.getPosicioRecorregut(i - 1), a.getPosicioRecorregut(i));
+            }
+            int distB = 0;
+            for (int i = 1; i < b.getRecorregut().size(); ++i) {
+                if (i == x) distB += calcularDistancia(b.getPosicioRecorregut(i - 1), a.getPosicioRecorregut(x));
+                else if (i == x + 1) distB += calcularDistancia(a.getPosicioRecorregut(x), b.getPosicioRecorregut(i));
+                else distB += calcularDistancia(b.getPosicioRecorregut(i - 1), b.getPosicioRecorregut(i));
+            }
+            if (distA < k && distB < k) {
+                int distAAux = 2 * (calcularDistancia(a.getPosicioRecorregut(x - 1), a.getPosicioRecorregut(x)) + calcularDistancia(a.getPosicioRecorregut(x), a.getPosicioRecorregut(x + 1)));
+                int distBAux = 2 * (calcularDistancia(b.getPosicioRecorregut(y - 1), b.getPosicioRecorregut(y)) + calcularDistancia(b.getPosicioRecorregut(y), b.getPosicioRecorregut(y + 1)));
+                Posicio aux = new Posicio(a.getPosicioRecorregut(x));
+                a.setPosicioARecorregut(x, b.getPosicioRecorregut(y));
+                b.setPosicioARecorregut(y, aux);
+                a.setDist(distA);
+                b.setDist(distB);
+                benefici -= (distAAux + distBAux);
+                distAAux = 2 * (calcularDistancia(a.getPosicioRecorregut(x - 1), a.getPosicioRecorregut(x)) + calcularDistancia(a.getPosicioRecorregut(x), a.getPosicioRecorregut(x + 1)));
+                distBAux = 2 * (calcularDistancia(b.getPosicioRecorregut(y - 1), b.getPosicioRecorregut(y)) + calcularDistancia(b.getPosicioRecorregut(y), b.getPosicioRecorregut(y + 1)));
+                benefici += (distAAux + distBAux);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public boolean afegirDesti (Cisterna a, Posicio x) {
+        if (a.getPos().getCoordX() == -1 &&  a.getPos().getCoordY() == -1) return false;
+        else {
+            int d = a.getDist() + calcularDistancia(a.getPos(), x);
+            if ( d < k) {
+                if (x.getCoordX() == a.getCentre().getCoordX() && x.getCoordY() == a.getCentre().getCoordY()) {
+                    a.setTancs(2);
+                    a.setViatges(a.getViatges() + 1);
+                    a.setPos(x);
+                    a.setDist(d);
+                    a.addPosicioARecorregut(x);
+                } else if (a.getTancs() == 0 && x.getCoordX() != a.getCentre().getCoordX() && x.getCoordY() != a.getCentre().getCoordY()) {
+                    return false;
+                } else {
+                    a.setTancs(a.getTancs() - 1);
+                    a.setPos(x);
+                    a.setDist(d);
+                    a.addPosicioARecorregut(x);
+                }
+                return true;
+            }
+            return false;
+        }
     }
 
 }
