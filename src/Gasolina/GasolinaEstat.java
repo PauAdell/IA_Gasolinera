@@ -12,7 +12,7 @@ public class GasolinaEstat {
 
     public static Gasolineras gaso;
     public static CentrosDistribucion centres;
-    public static int k;
+    public static double k;
     public static int v;
 
     private double benefici;
@@ -37,14 +37,17 @@ public class GasolinaEstat {
 
         fantasma = new Cisterna (-1, -1);
 
+        int comptador = 0;
         for (int i = 0; i < nGaso; ++i) {
             for (int j = 0; j < gaso.get(i).getPeticiones().size(); ++j) {
                 Posicio aux = new Posicio(gaso.get(i).getCoordX(), gaso.get(i).getCoordY(), gaso.get(i).getPeticiones().get(j));
                 fantasma.addPosicioARecorregut(aux);
-                System.out.println("Posicio recorregut : " + i + " " + fantasma.getPosicioRecorregut(i).getCoordX() + ',' + fantasma.getPosicioRecorregut(i).getCoordY() + " " + fantasma.getPosicioRecorregut(i).getDia());
+                System.out.println("Posicio recorregut: " + comptador + " Coords de peticio: " + fantasma.getPosicioRecorregut(comptador).getCoordX() + ',' + fantasma.getPosicioRecorregut(comptador).getCoordY() + " Dia pet: " + fantasma.getPosicioRecorregut(comptador).getDia());
                 //System.out.println("Peticio: " + aux.getCoordX() + "," + aux.getCoordY());
+                ++comptador;
             }
         }
+        System.out.println(fantasma.getRecorregut().size());
 
     }
 
@@ -221,14 +224,15 @@ public class GasolinaEstat {
         if (a.getPos().getCoordX() == -1 &&  a.getPos().getCoordY() == -1) return false;
         else {
             double d = a.getDist() + calcularDistancia(a.getPos(), x);
-            if ( d < k) {
+            System.out.println(d);
+            if ( d <= k) {
                 if (x.getCoordX() == a.getCentre().getCoordX() && x.getCoordY() == a.getCentre().getCoordY()) {
                     a.setTancs(2);
                     a.setViatges(a.getViatges() + 1);
                     a.setPos(x);
                     a.setDist(d);
                     a.addPosicioARecorregut(x);
-                } else if (a.getTancs() == 0 && x.getCoordX() != a.getCentre().getCoordX() && x.getCoordY() != a.getCentre().getCoordY()) {
+                } else if (a.getTancs() == 0 ) {
                     return false;
                 } else {
                     a.setTancs(a.getTancs() - 1);
@@ -238,7 +242,8 @@ public class GasolinaEstat {
                 }
                 benefici -= 2 * calcularDistancia(a.getPos(), x);
                 if (x.getDia() != -1) benefici += 1000 * ((100 - Math.pow(2.0, x.getDia())) / 100);
-                fantasma.getRecorregut().remove(x);
+                System.out.println("Ara eliminare la pos: " + x.getCoordX() + "," + x.getCoordY());
+                fantasma.eliminaPosicio(x);
                 return true;
             }
             return false;
@@ -254,6 +259,17 @@ public class GasolinaEstat {
 
         return coordX + coordY;
 
+    }
+
+    public void imprimirEstat() {
+        int comptador = 0;
+        for (int i = 0; i < cisternes.size(); ++i) {
+            System.out.println("Cisterna: " + i);
+            for (int j = 0; j < cisternes.get(i).getRecorregut().size(); ++j) {
+                System.out.println("Posicio : " + comptador + " Coords de pes: " + cisternes.get(i).getPosicioRecorregut(j).getCoordX() + ',' + cisternes.get(i).getPosicioRecorregut(j).getCoordY() + " Dia pet: " + cisternes.get(i).getPosicioRecorregut(j).getDia());
+            }
+        }
+        System.out.println("Benefici: " + benefici);
     }
 
 }

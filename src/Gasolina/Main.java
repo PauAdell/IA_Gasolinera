@@ -24,6 +24,7 @@ public class Main {
         //estat.generarEstatSolucio2();
         //estat.imprimirEstat();
         GasolinaHillClimbingSearch(estat);
+        estat.imprimirEstat();
         //GasolinaSimulatedAnnealingSearch(estat);
     }
 

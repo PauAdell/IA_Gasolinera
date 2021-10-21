@@ -6,7 +6,7 @@ public class Cisterna {
 
     private Posicio pos;
     private Posicio centre;
-    ArrayList<Posicio> recorregut;
+    private ArrayList<Posicio> recorregut;
     private double dist;
     private int viatges;
     private int tancs;
@@ -78,11 +78,11 @@ public class Cisterna {
         pos = p;
     }
 
-    public void addPosicioARecorregut ( Posicio p) {
+    public void addPosicioARecorregut ( Posicio p ) {
         recorregut.add(p);
     }
 
-    public void removePeticio( int i ) { recorregut.remove(i);}
+    public void eliminaPosicio( Posicio x ) { recorregut.remove(x);}
 
     public void setPosicioARecorregut ( int i, Posicio b) {
         recorregut.set(i, b);

@@ -14,19 +14,30 @@ public class GasolinaSuccessorFunction implements SuccessorFunction {
 
         ArrayList<Successor> retVal = new ArrayList<>();
         GasolinaEstat e = (GasolinaEstat) aState;
+        System.out.println("-----------EstatInicial------------");
+        for (int k = 0; k < e.getFantasma().getRecorregut().size(); ++k ) {
+            System.out.println("Pos pet: " + k + " " + e.getFantasma().getPosicioRecorregut(k).getCoordX() + "," + e.getFantasma().getPosicioRecorregut(k).getCoordY());
+        }
+
+
 
         for (int i = 0; i < e.getCisternes().size(); i++) {
             for (int j = 0; j < e.getFantasma().getRecorregut().size(); j++) {
                     GasolinaEstat nouEstat = new GasolinaEstat(e);
+                    System.out.println("-----------NouEstat------------");
+                    for (int k = 0; k < nouEstat.getFantasma().getRecorregut().size(); ++k ) {
+                        System.out.println("Pos pet: " + k + " " + nouEstat.getFantasma().getPosicioRecorregut(k).getCoordX() + "," + nouEstat.getFantasma().getPosicioRecorregut(k).getCoordY());
+                    }
+                    System.out.println("Posicio recorregut: " + j + " Coords de peticio: " + nouEstat.getFantasma().getPosicioRecorregut(j).getCoordX() + ',' + nouEstat.getFantasma().getPosicioRecorregut(j).getCoordY() + " Dia pet: " + nouEstat.getFantasma().getPosicioRecorregut(j).getDia());
                     if (nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(j))) {
                         String S = "Ruta Afegida de Cisterna " + i + " a Peticio " + j;
                         retVal.add(new Successor(S, nouEstat));
                         //--j;
-                        /*
-                        System.out.println("Mida: " + nouEstat.getFantasma().getRecorregut().size());
-                        System.out.println("Afegicio " + j + " Cisterna: " + i);
-                        System.out.println("Benf: " + nouEstat.getBenefici());
-                        */
+                        System.out.println("Peticions restants: " + nouEstat.getFantasma().getRecorregut().size());
+                        System.out.println("Cisterna: " + i + " Intenta afegir peticio a pos " + j + " de recorregut fantasma" );
+                        for (int k = 0; k < nouEstat.getFantasma().getRecorregut().size(); ++k ) {
+                            System.out.println("Pos pet: " + k + " " + nouEstat.getFantasma().getPosicioRecorregut(k).getCoordX() + "," + nouEstat.getFantasma().getPosicioRecorregut(k).getCoordY() + " dia pet: " + nouEstat.getFantasma().getPosicioRecorregut(k).getDia());
+                        }
                     }
             }
 
