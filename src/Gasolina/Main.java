@@ -19,7 +19,7 @@ import java.util.Properties;
 public class Main {
 
     public static void main(String[] args) {
-        GasolinaEstat estat = new GasolinaEstat(2, 1234, 4, 20);
+        GasolinaEstat estat = new GasolinaEstat(9, 1234, 5, 1);
         //estat.generarEstatSolucio1();
         //estat.generarEstatSolucio2();
         //estat.imprimirEstat();

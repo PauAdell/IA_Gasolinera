@@ -51,8 +51,8 @@ public class GasolinaEstat {
     public GasolinaEstat(GasolinaEstat estat) {
         gaso = estat.gaso;
         centres = estat.centres;
-        cisternes = new ArrayList<Cisterna>(estat.cisternes);
-        fantasma = new Cisterna(estat.fantasma);
+        cisternes = new ArrayList<Cisterna>(estat.getCisternes());
+        fantasma = new Cisterna(estat.getFantasma());
         benefici = estat.benefici;
         k = estat.k;
         v = estat.v;
@@ -63,6 +63,10 @@ public class GasolinaEstat {
     public Cisterna getFantasma() { return fantasma; }
 
     public double getBenefici() { return benefici; }
+
+    public Cisterna getCisternaX(int i) {
+        return cisternes.get(i);
+    }
 
     //Benefici = 0, tenir tots els camions parats, sense assignacions/peticions
     //public void generarEstatSolucio1() {
@@ -216,7 +220,7 @@ public class GasolinaEstat {
     public boolean afegirDesti (Cisterna a, Posicio x) {
         if (a.getPos().getCoordX() == -1 &&  a.getPos().getCoordY() == -1) return false;
         else {
-            int d = a.getDist() + calcularDistancia(a.getPos(), x);
+            double d = a.getDist() + calcularDistancia(a.getPos(), x);
             if ( d < k) {
                 if (x.getCoordX() == a.getCentre().getCoordX() && x.getCoordY() == a.getCentre().getCoordY()) {
                     a.setTancs(2);

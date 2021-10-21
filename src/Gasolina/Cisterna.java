@@ -7,7 +7,7 @@ public class Cisterna {
     private Posicio pos;
     private Posicio centre;
     ArrayList<Posicio> recorregut;
-    private int dist;
+    private double dist;
     private int viatges;
     private int tancs;
 
@@ -34,7 +34,7 @@ public class Cisterna {
         entregues = c.entregues;
     }
 
-    public int getDist() {
+    public double getDist() {
         return this.dist;
     }
 
@@ -54,7 +54,7 @@ public class Cisterna {
 
     public void setEntregues(int e) {entregues = e;}
 
-    public void setDist(int newDist) {
+    public void setDist(double newDist) {
         this.dist = newDist;
     }
 

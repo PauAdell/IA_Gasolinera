@@ -15,20 +15,21 @@ public class GasolinaSuccessorFunction implements SuccessorFunction {
         ArrayList<Successor> retVal = new ArrayList<>();
         GasolinaEstat e = (GasolinaEstat) aState;
 
-        //ArrayList<Cisterna> cist = new ArrayList<Cisterna>(e.getCisternes());
-        //Cisterna fant = new Cisterna(e.getFantasma());
-
         for (int i = 0; i < e.getCisternes().size(); i++) {
-
             for (int j = 0; j < e.getFantasma().getRecorregut().size(); j++) {
-                GasolinaEstat nouEstat = new GasolinaEstat(e);
-                if (nouEstat.afegirDesti((Cisterna) nouEstat.getCisternes().get(i), nouEstat.getFantasma().getPosicioRecorregut(j))) {
-                    String S = "Ruta Afegida de Cisterna " + i + " a Peticio " + j;
-                    retVal.add(new Successor(S, nouEstat));
-                    --j;
-                    System.out.println("Afegicio " + i);
-                }
+                    GasolinaEstat nouEstat = new GasolinaEstat(e);
+                    if (nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(j))) {
+                        String S = "Ruta Afegida de Cisterna " + i + " a Peticio " + j;
+                        retVal.add(new Successor(S, nouEstat));
+                        //--j;
+                        /*
+                        System.out.println("Mida: " + nouEstat.getFantasma().getRecorregut().size());
+                        System.out.println("Afegicio " + j + " Cisterna: " + i);
+                        System.out.println("Benf: " + nouEstat.getBenefici());
+                        */
+                    }
             }
+
             /*
             int k = 0;          //index recorregut cisterna
             j = 0;              // index recorregut fantasma
