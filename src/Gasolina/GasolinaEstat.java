@@ -48,9 +48,14 @@ public class GasolinaEstat {
 
     }
 
+    //Benefici = 0, tenir tots els camions parats, sense assignacions/peticions
+    public void generarEstatSolucio1() {
+
+    }
+
     /*
     // per cada cisterna assignem totes les peticions possibles fins que ja no li quedin viatges i passem a la seguent
-    public void generarEstatSolucio1() {
+    public void generarEstatSolucio2() {
         int nPeticions = fantasma.getRecorregut().size();
 
         for (int i = 0; i < cisternes.size(); ++i) {
@@ -117,7 +122,6 @@ public class GasolinaEstat {
                 benefici -= 2 * c.getDist();
         }
     }
-
      */
 
     private int calcularDistancia(Posicio centre, Posicio gasolinera) {
