@@ -15,7 +15,7 @@ public class GasolinaEstat {
     public static int k;
     public static int v;
 
-    private int benefici;
+    private double benefici;
 
     private Cisterna fantasma;
 
@@ -41,17 +41,33 @@ public class GasolinaEstat {
             for (int j = 0; j < gaso.get(i).getPeticiones().size(); ++j) {
                 Posicio aux = new Posicio(gaso.get(i).getCoordX(), gaso.get(i).getCoordY(), gaso.get(i).getPeticiones().get(j));
                 fantasma.addPosicioARecorregut(aux);
-                //System.out.println("Gaso: " + gaso.get(i).getCoordX() + "," + gaso.get(i).getCoordY());
+                System.out.println("Posicio recorregut : " + i + " " + fantasma.getPosicioRecorregut(i).getCoordX() + ',' + fantasma.getPosicioRecorregut(i).getCoordY() + " " + fantasma.getPosicioRecorregut(i).getDia());
                 //System.out.println("Peticio: " + aux.getCoordX() + "," + aux.getCoordY());
             }
         }
 
     }
 
-    //Benefici = 0, tenir tots els camions parats, sense assignacions/peticions
-    public void generarEstatSolucio1() {
-
+    public GasolinaEstat(GasolinaEstat estat) {
+        gaso = estat.gaso;
+        centres = estat.centres;
+        cisternes = new ArrayList<Cisterna>(estat.cisternes);
+        fantasma = new Cisterna(estat.fantasma);
+        benefici = estat.benefici;
+        k = estat.k;
+        v = estat.v;
     }
+
+    public ArrayList getCisternes() { return cisternes; }
+
+    public Cisterna getFantasma() { return fantasma; }
+
+    public double getBenefici() { return benefici; }
+
+    //Benefici = 0, tenir tots els camions parats, sense assignacions/peticions
+    //public void generarEstatSolucio1() {
+
+    //}
 
     /*
     // per cada cisterna assignem totes les peticions possibles fins que ja no li quedin viatges i passem a la seguent
@@ -124,14 +140,7 @@ public class GasolinaEstat {
     }
      */
 
-    private int calcularDistancia(Posicio centre, Posicio gasolinera) {
-
-        int coordX = Math.abs(centre.getCoordX() - gasolinera.getCoordX());
-        int coordY = Math.abs(centre.getCoordY() - gasolinera.getCoordY());
-
-        return coordX + coordY;
-
-    }
+    // Operadors
 
     public boolean swapPetitions (Cisterna a, Cisterna b, int x , int y) {
 
@@ -223,10 +232,24 @@ public class GasolinaEstat {
                     a.setDist(d);
                     a.addPosicioARecorregut(x);
                 }
+                benefici -= 2 * calcularDistancia(a.getPos(), x);
+                if (x.getDia() != -1) benefici += 1000 * ((100 - Math.pow(2.0, x.getDia())) / 100);
+                fantasma.getRecorregut().remove(x);
                 return true;
             }
             return false;
         }
+    }
+
+    // Funcions Auxiliars
+
+    private int calcularDistancia(Posicio centre, Posicio gasolinera) {
+
+        int coordX = Math.abs(centre.getCoordX() - gasolinera.getCoordX());
+        int coordY = Math.abs(centre.getCoordY() - gasolinera.getCoordY());
+
+        return coordX + coordY;
+
     }
 
 }

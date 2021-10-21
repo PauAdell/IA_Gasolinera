@@ -3,8 +3,8 @@ package Gasolina;
 import aima.search.framework.SuccessorFunction;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
+import java.util.List;
 
 public class GasolinaSuccessorFunctionSA implements SuccessorFunction {
 

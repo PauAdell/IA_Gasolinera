@@ -17,10 +17,21 @@ public class Cisterna {
         pos = new Posicio( CoordX, CoordY, -1);
         centre = new Posicio( CoordX, CoordY, -1);
         recorregut = new ArrayList<Posicio>();
+        if (CoordX != -1 && CoordY != -1) recorregut.add(0, centre);
         dist = 0;
         viatges = 0;
         tancs = 2;
         entregues = 0;
+    }
+
+    public Cisterna(Cisterna c) {
+        pos = new Posicio(c.getPos());
+        centre = new Posicio(c.getCentre());
+        recorregut = new ArrayList<Posicio>(c.getRecorregut());
+        dist = c.dist;
+        viatges = c.viatges;
+        tancs = c.tancs;
+        entregues = c.entregues;
     }
 
     public int getDist() {
