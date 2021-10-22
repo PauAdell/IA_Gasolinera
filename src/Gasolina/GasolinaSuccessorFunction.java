@@ -32,11 +32,14 @@ public class GasolinaSuccessorFunction implements SuccessorFunction {
                     if (nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(j))) {
                         String S = "Ruta Afegida de Cisterna " + i + " a Peticio " + j;
                         retVal.add(new Successor(S, nouEstat));
-                        //--j;
                         System.out.println("Peticions restants: " + nouEstat.getFantasma().getRecorregut().size());
                         System.out.println("Cisterna: " + i + " Intenta afegir peticio a pos " + j + " de recorregut fantasma" );
                         for (int k = 0; k < nouEstat.getFantasma().getRecorregut().size(); ++k ) {
                             System.out.println("Pos pet: " + k + " " + nouEstat.getFantasma().getPosicioRecorregut(k).getCoordX() + "," + nouEstat.getFantasma().getPosicioRecorregut(k).getCoordY() + " dia pet: " + nouEstat.getFantasma().getPosicioRecorregut(k).getDia());
+                        }
+                        System.out.println("Recorregut de cisterna: " + i);
+                        for (int p = 0; p < nouEstat.getCisternaX(i).getRecorregut().size(); ++p) {
+                            System.out.println("Pos: " + p + "(" + nouEstat.getCisternaX(i).getPosicioRecorregut(p).getCoordX() + "," + nouEstat.getCisternaX(i).getPosicioRecorregut(p).getCoordY() + ") dia" + nouEstat.getCisternaX(i).getPosicioRecorregut(p).getDia()  );
                         }
                     }
             }

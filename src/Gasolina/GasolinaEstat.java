@@ -221,34 +221,49 @@ public class GasolinaEstat {
     }
 
     public boolean afegirDesti (Cisterna a, Posicio x) {
-        if (a.getPos().getCoordX() == -1 &&  a.getPos().getCoordY() == -1) return false;
-        else {
-            double d = a.getDist() + calcularDistancia(a.getPos(), x);
+        if (a.getTancs() == 0) {
+            double d = a.getDist() + calcularDistancia( a.getPos() , a.getCentre()) + calcularDistancia(a.getCentre(), x);
             System.out.println(d);
-            if ( d <= k) {
-                if (x.getCoordX() == a.getCentre().getCoordX() && x.getCoordY() == a.getCentre().getCoordY()) {
-                    a.setTancs(2);
-                    a.setViatges(a.getViatges() + 1);
-                    a.setPos(x);
-                    a.setDist(d);
-                    a.addPosicioARecorregut(x);
-                } else if (a.getTancs() == 0 ) {
-                    return false;
-                } else {
-                    a.setTancs(a.getTancs() - 1);
-                    a.setPos(x);
-                    a.setDist(d);
-                    a.addPosicioARecorregut(x);
-                }
-                benefici -= 2 * calcularDistancia(a.getPos(), x);
-                if (x.getDia() != -1) benefici += 1000 * ((100 - Math.pow(2.0, x.getDia())) / 100);
+            if (d <= k && a.getViatges() < 5) {
+                a.setTancs(1);
+                a.setViatges(a.getViatges() + 1);
+                a.setPos(x);
+                a.setDist(d);
+                a.addPosicioARecorregut(a.getCentre());
+                a.addPosicioARecorregut(x);
+                benefici -= 2 * calcularDistancia( a.getPos() , a.getCentre()) + calcularDistancia(a.getCentre(), x);
+                benefici += 1000 * ((100 - Math.pow(2.0, x.getDia())) / 100);
                 System.out.println("Ara eliminare la pos: " + x.getCoordX() + "," + x.getCoordY());
                 fantasma.eliminaPosicio(x);
                 return true;
             }
             return false;
+        } else {
+                double d = a.getDist() + calcularDistancia(a.getPos(), x);
+                System.out.println(d);
+                if (d <= k) {
+                    if (x.getCoordX() == a.getCentre().getCoordX() && x.getCoordY() == a.getCentre().getCoordY()) {
+                        a.setTancs(2);
+                        a.setViatges(a.getViatges() + 1);
+                        a.setPos(x);
+                        a.setDist(d);
+                        a.addPosicioARecorregut(x);
+                    } else {
+                        a.setTancs(a.getTancs() - 1);
+                        a.setPos(x);
+                        a.setDist(d);
+                        a.addPosicioARecorregut(x);
+                    }
+                    benefici -= 2 * calcularDistancia(a.getPos(), x);
+                    if (x.getDia() != -1) benefici += 1000 * ((100 - Math.pow(2.0, x.getDia())) / 100);
+                    System.out.println("Ara eliminare la pos: " + x.getCoordX() + "," + x.getCoordY());
+                    fantasma.eliminaPosicio(x);
+                    return true;
+                }
+        return false;
         }
     }
+
 
     // Funcions Auxiliars
 
