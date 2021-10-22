@@ -54,9 +54,14 @@ public class GasolinaEstat {
     public GasolinaEstat(GasolinaEstat estat) {
         gaso = estat.gaso;
         centres = estat.centres;
-        cisternes = new ArrayList<Cisterna>(estat.getCisternes());
+        Cisterna aux;
+        cisternes = new ArrayList<Cisterna>();
+        for (int i = 0; i < estat.getCisternes().size(); ++i) {
+            aux = new Cisterna(estat.getCisternaX(i));
+            cisternes.add(aux);
+        }
         fantasma = new Cisterna(estat.getFantasma());
-        benefici = estat.benefici;
+        benefici = estat.getBenefici();
         k = estat.k;
         v = estat.v;
     }
@@ -223,7 +228,6 @@ public class GasolinaEstat {
     public boolean afegirDesti (Cisterna a, Posicio x) {
         if (a.getTancs() == 0) {
             double d = a.getDist() + calcularDistancia( a.getPos() , a.getCentre()) + calcularDistancia(a.getCentre(), x);
-            System.out.println(d);
             if (d <= k && a.getViatges() < 5) {
                 a.setTancs(1);
                 a.setViatges(a.getViatges() + 1);
@@ -233,14 +237,12 @@ public class GasolinaEstat {
                 a.addPosicioARecorregut(x);
                 benefici -= 2 * calcularDistancia( a.getPos() , a.getCentre()) + calcularDistancia(a.getCentre(), x);
                 benefici += 1000 * ((100 - Math.pow(2.0, x.getDia())) / 100);
-                System.out.println("Ara eliminare la pos: " + x.getCoordX() + "," + x.getCoordY());
                 fantasma.eliminaPosicio(x);
                 return true;
             }
             return false;
         } else {
                 double d = a.getDist() + calcularDistancia(a.getPos(), x);
-                System.out.println(d);
                 if (d <= k) {
                     if (x.getCoordX() == a.getCentre().getCoordX() && x.getCoordY() == a.getCentre().getCoordY()) {
                         a.setTancs(2);
@@ -256,7 +258,6 @@ public class GasolinaEstat {
                     }
                     benefici -= 2 * calcularDistancia(a.getPos(), x);
                     if (x.getDia() != -1) benefici += 1000 * ((100 - Math.pow(2.0, x.getDia())) / 100);
-                    System.out.println("Ara eliminare la pos: " + x.getCoordX() + "," + x.getCoordY());
                     fantasma.eliminaPosicio(x);
                     return true;
                 }

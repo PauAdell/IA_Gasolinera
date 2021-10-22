@@ -27,11 +27,16 @@ public class Cisterna {
     public Cisterna(Cisterna c) {
         pos = new Posicio(c.getPos());
         centre = new Posicio(c.getCentre());
-        recorregut = new ArrayList<Posicio>(c.getRecorregut());
-        dist = c.dist;
-        viatges = c.viatges;
-        tancs = c.tancs;
-        entregues = c.entregues;
+        Posicio aux;
+        recorregut = new ArrayList<Posicio>();
+        for(int i = 0; i < c.getRecorregut().size(); ++i) {
+            aux = new Posicio(c.getPosicioRecorregut(i));
+            recorregut.add(aux);
+        }
+        this.dist = c.dist;
+        this.viatges = c.viatges;
+        this.tancs = c.tancs;
+        this.entregues = c.entregues;
     }
 
     public double getDist() {
