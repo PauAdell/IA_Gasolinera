@@ -5,6 +5,7 @@ import IA.Gasolina.Gasolinera;
 import IA.Gasolina.*;
 
 import java.lang.Math;
+import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -76,81 +77,69 @@ public class GasolinaEstat {
         return cisternes.get(i);
     }
 
-    //Benefici = 0, tenir tots els camions parats, sense assignacions/peticions
-    //public void generarEstatSolucio1() {
+    public void generarEstatSolucio1() {
 
-    //}
+        double benefMax = 0;
+        double benefMaxTotal = 0;
+        int mesB = -1;
+        boolean cisternesEsPodenMoure = true;
 
-    /*
-    // per cada cisterna assignem totes les peticions possibles fins que ja no li quedin viatges i passem a la seguent
-    public void generarEstatSolucio2() {
-        int nPeticions = fantasma.getRecorregut().size();
-
-        for (int i = 0; i < cisternes.size(); ++i) {
-
+        while (fantasma.getRecorregut().size() > 0 && cisternesEsPodenMoure) {
+            ArrayList<Posicio> millorsPeticions = new ArrayList<Posicio>();
+            mesB = -1;
+            benefMaxTotal = 0;
+            for (int i = 0; i < cisternes.size(); ++i) {
+                Posicio millor = new Posicio(-1, -1, -1);
+                benefMax = 0;
                 Cisterna c = cisternes.get(i);
+                for (int j = 0; j < fantasma.getRecorregut().size(); ++j) {
+                    double benefAux = 0;
 
-                for (int j = 0; j < nPeticions; ++j) {
-
-                    Posicio p = fantasma.getPeticio(j);
-
-                    int dist = c.getDist() + calcularDistancia(c.getPos(), p.getPos()) + calcularDistancia(p.getPos(), c.getCentre());
-
-                    if (c.getViatges() <= v && dist <= k) {
-
-                        if (c.getTancs() == 0) {             // si els tancs estan buits tornem al centre
-
-                            c.setViatges(c.getViatges() + 1);
-                            c.setTancs(2);
-
-                            int distNova = c.getDist() + calcularDistancia(c.getPos(), c.getCentre());
-                            c.setPos(c.getCentre());
-                            c.setDist(distNova);
-                        }
-
-                        else {          // tancs > 0
-
-                            int distGaso = calcularDistancia(c.getPos(), p.getPos());
-                            int distReco = c.getDist();
-                            int distTornada = calcularDistancia(p.getPos(), c.getCentre());
-
-                            //System.out.print("Camio: " + i + " esta a (" + c.getPos().getCoordX() + "," + c.getPos().getCoordY());
-                            //System.out.print(") vol anar a (" + p.getPos().getCoordX() + "," + p.getPos().getCoordY());
-                            //System.out.println(") a una distancia " + distGaso + " amb tornada " + distTornada + " ha recorregut " + distReco );
-
-                            if (distGaso + distReco + distTornada < k) {
-
-                                c.setDist(c.getDist() + distGaso);
-                                c.setTancs(c.getTancs() - 1);
-
-                                c.setPos(p.getPos());
-                                int d = p.getDia();
-
-                                c.setEntregues(c.getEntregues() + 1);
-
-                                benefici += 1000 * ((100 - Math.pow(2.0, d)) / 100);
-                                c.addPeticioARecorregut(p);
-                                fantasma.removePeticio(j);
+                    if (c.getTancs() == 0) {
+                        double d = c.getDist() + calcularDistancia(c.getPos(), c.getCentre()) + calcularDistancia(c.getCentre(), fantasma.getPosicioRecorregut(j));
+                        if (d <= k && c.getViatges() < 5) {
+                            benefAux -= 2 * calcularDistancia(c.getPos(), c.getCentre()) + calcularDistancia(c.getCentre(), fantasma.getPosicioRecorregut(j));
+                            benefAux += 1000 * ((100 - Math.pow(2.0, fantasma.getPosicioRecorregut(j).getDia())) / 100);
+                            if (benefAux > benefMax) {
+                                benefMax = benefAux;
+                                millor = fantasma.getPosicioRecorregut(j);
                             }
-
                         }
-                        if (nPeticions != fantasma.getRecorregut().size())  {
-                            j -= 1;
-                            nPeticions = fantasma.getRecorregut().size();
+                    } else {
+                        double d = c.getDist() + calcularDistancia(c.getPos(), fantasma.getPosicioRecorregut(j));
+                        if (d <= k && c.getViatges() <= 5) {
+                            benefAux -= 2 * calcularDistancia(c.getPos(), fantasma.getPosicioRecorregut(j));
+                            benefAux += 1000 * ((100 - Math.pow(2.0, fantasma.getPosicioRecorregut(j).getDia())) / 100);
+                            if (benefAux > benefMax) {
+                                benefMax = benefAux;
+                                millor = fantasma.getPosicioRecorregut(j);
+                            }
                         }
                     }
 
+                    if (benefMax > benefMaxTotal) {
+                        benefMaxTotal = benefMax;
+                        mesB = i;
+                    }
                 }
-                if (c.getPos().getCoordX() != c.getCentre().getCoordX() && c.getPos().getCoordY() != c.getCentre().getCoordY()) {
-                    int dist = calcularDistancia(c.getPos(), c.getCentre());
-                    c.setDist(c.getDist() + dist);
-                    c.setPos(c.getCentre());
-                    c.setViatges(c.getViatges() + 1);
-                }
-                benefici -= 2 * c.getDist();
+                millorsPeticions.add(millor);
+            }
+
+            if (mesB != -1 && hiHaMillorsPeticions(millorsPeticions)) {
+                afegirDesti(cisternes.get(mesB), millorsPeticions.get(mesB));
+            } else {
+                cisternesEsPodenMoure = false;
+            }
         }
     }
-     */
+
+    private boolean hiHaMillorsPeticions( ArrayList<Posicio> p) {
+        boolean aux = false;
+        for (int i = 0; i < p.size(); ++i) {
+            if (p.get(i).getCoordX() != -1 && p.get(i).getCoordY() != -1 && p.get(i).getDia() != -1) aux = true;
+        }
+        return aux;
+    }
 
     // Operadors
 

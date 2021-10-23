@@ -15,8 +15,8 @@ public class GasolinaSuccessorFunction implements SuccessorFunction {
         ArrayList<Successor> retVal = new ArrayList<>();
         GasolinaEstat e = (GasolinaEstat) aState;
 
-        for (int i = 0; i < e.getCisternes().size(); i++) {
-            for (int j = 0; j < e.getFantasma().getRecorregut().size(); j++) {
+        for (int i = 0; i < e.getCisternes().size(); ++i) {
+            for (int j = 0; j < e.getFantasma().getRecorregut().size(); ++j) {
                     GasolinaEstat nouEstat = new GasolinaEstat(e);
                     if (nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(j))) {
                         String S = "Ruta Afegida de Cisterna " + i + " a Peticio " + j;

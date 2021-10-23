@@ -19,11 +19,11 @@ import java.util.Properties;
 public class Main {
 
     public static void main(String[] args) {
-        GasolinaEstat estat = new GasolinaEstat(9, 1234, 5, 1);
-        //estat.generarEstatSolucio1();
+        GasolinaEstat estat = new GasolinaEstat(20, 1234, 10, 2);
+        estat.generarEstatSolucio1();
         //estat.generarEstatSolucio2();
         //estat.imprimirEstat();
-        GasolinaHillClimbingSearch(estat);
+        //GasolinaHillClimbingSearch(estat);
         estat.imprimirEstat();
         //GasolinaSimulatedAnnealingSearch(estat);
     }
