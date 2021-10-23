@@ -1,16 +1,11 @@
 package Gasolina;
 
-import IA.Gasolina.CentrosDistribucion;
-import IA.Gasolina.Distribucion;
-import IA.Gasolina.Gasolinera;
-import IA.Gasolina.Gasolineras;
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.SimulatedAnnealingSearch;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -19,12 +14,12 @@ import java.util.Properties;
 public class Main {
 
     public static void main(String[] args) {
-        GasolinaEstat estat = new GasolinaEstat(20, 1234, 10, 2);
-        estat.generarEstatSolucio1();
+        GasolinaEstat estat = new GasolinaEstat(5, 1234, 3, 2);
+        //estat.generarEstatSolucio1();
         //estat.generarEstatSolucio2();
         //estat.imprimirEstat();
-        //GasolinaHillClimbingSearch(estat);
-        estat.imprimirEstat();
+        GasolinaHillClimbingSearch(estat);
+        //estat.imprimirEstat();
         //GasolinaSimulatedAnnealingSearch(estat);
     }
 

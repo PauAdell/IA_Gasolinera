@@ -19,31 +19,31 @@ public class GasolinaSuccessorFunction implements SuccessorFunction {
             for (int j = 0; j < e.getFantasma().getRecorregut().size(); ++j) {
                     GasolinaEstat nouEstat = new GasolinaEstat(e);
                     if (nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(j))) {
-                        String S = "Ruta Afegida de Cisterna " + i + " a Peticio " + j;
+                        String S = nouEstat.toString();
                         retVal.add(new Successor(S, nouEstat));
                     }
             }
 
-            /*
-            int k = 0;          //index recorregut cisterna
-            j = 0;              // index recorregut fantasma
-            while (e.getFantasma().getRecorregut().size() != 0 && j < e.getFantasma().getRecorregut().size()-2) {
-                Cisterna aux = new Cisterna((Cisterna) e.getCisternes().get(i));
-                if (aux.getPosicioRecorregut(k).getDia() != -1 && k < aux.getRecorregut().size()-2) {
-                    if (e.swapPetitions((Cisterna) e.getCisternes().get(i), e.getFantasma(), k+1, j+1)) {
-                        GasolinaEstat nouEstat = new GasolinaEstat(e);
-                        String S = "Intercanvi entre Cisterna " + i + " i Cisterna " + j;
-                        retVal.add(new Successor(S, nouEstat));
-                        ++k;
+            Cisterna aux = new Cisterna(e.getCisternaX(i));        // Cisterna i
+
+            for (int j = 1; j < e.getCisternaX(i).getRecorregut().size()-1; ++j) {
+                GasolinaEstat nouEstat = new GasolinaEstat(e);
+
+
+                for (int k = 0; k < e.getCisternes().size(); ++k) {
+                    Cisterna aux2 = new Cisterna(nouEstat.getCisternaX(k));        // Cisterna k
+                    for (int h = 1; h < e.getCisternaX(k).getRecorregut().size()-1; ++h) {
+                        if (aux.getPosicioRecorregut(j).getDia() != -1 && aux2.getPosicioRecorregut(h).getDia() != -1) {
+                            if (nouEstat.swapPetitions(aux, aux2, j, h)) {
+                                String S = "Intercanvi entre Cisterna " + i + " i Cisterna " + j + nouEstat.toString();
+                                retVal.add(new Successor(S, nouEstat));
+                            }
+                        }
                     }
                 }
-                ++j;
-            }*/
+            }
         }
-
         return retVal;
-
-        //inacabadissim
     }
 
 }

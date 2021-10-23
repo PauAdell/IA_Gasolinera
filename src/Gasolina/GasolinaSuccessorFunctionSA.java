@@ -21,6 +21,6 @@ public class GasolinaSuccessorFunctionSA implements SuccessorFunction {
 
         return retVal;
 
-        //inacabadissim x2
+
     }
 }

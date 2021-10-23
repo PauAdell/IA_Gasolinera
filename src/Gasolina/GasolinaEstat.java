@@ -271,10 +271,23 @@ public class GasolinaEstat {
         for (int i = 0; i < cisternes.size(); ++i) {
             System.out.println("Cisterna: " + i);
             for (int j = 0; j < cisternes.get(i).getRecorregut().size(); ++j) {
-                System.out.println("Posicio : " + comptador + " Coords de pes: " + cisternes.get(i).getPosicioRecorregut(j).getCoordX() + ',' + cisternes.get(i).getPosicioRecorregut(j).getCoordY() + " Dia pet: " + cisternes.get(i).getPosicioRecorregut(j).getDia());
+                System.out.println("Posicio : " + j + " Coords de pes: " + cisternes.get(i).getPosicioRecorregut(j).getCoordX() + ',' + cisternes.get(i).getPosicioRecorregut(j).getCoordY() + " Dia pet: " + cisternes.get(i).getPosicioRecorregut(j).getDia());
             }
         }
         System.out.println("Benefici: " + benefici);
+    }
+
+    public String toString() {
+        String sortida = new String();
+
+        for (int i = 0; i < cisternes.size(); ++i) {
+            sortida = sortida + " Cisterna: " + i + "\n";
+            for (int j = 0; j < cisternes.get(i).getRecorregut().size(); ++j) {
+                sortida = sortida + "       Posicio : " + j + "\n" + "       Coords de pes: " + cisternes.get(i).getPosicioRecorregut(j).getCoordX() + ',' + cisternes.get(i).getPosicioRecorregut(j).getCoordY() + "\n" + "       Dia pet: " + cisternes.get(i).getPosicioRecorregut(j).getDia() + "\n";
+            }
+        }
+        sortida = sortida + "\n" + " Benefici: " + benefici + "\n";
+        return sortida;
     }
 
 }
