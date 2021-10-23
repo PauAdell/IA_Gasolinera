@@ -90,7 +90,7 @@ public class Cisterna {
     public void eliminaPosicio( Posicio x ) { recorregut.remove(x);}
 
     public void setPosicioARecorregut ( int i, Posicio b) {
-        recorregut.set(i, b);
+        recorregut.set(i,b);
     }
 
 

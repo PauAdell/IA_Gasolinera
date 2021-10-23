@@ -16,8 +16,6 @@ public class GasolinaEstat {
     public static double k;
     public static int v;
 
-    private double benefici;
-
     private Cisterna fantasma;
 
     private ArrayList<Cisterna> cisternes;
@@ -27,7 +25,6 @@ public class GasolinaEstat {
         centres = new CentrosDistribucion(nCent, mult, seed);
         k = 640;
         v = 5;
-        benefici = 0;
 
         cisternes = new ArrayList<Cisterna>(nCent);
         for (int i = 0; i < nCent; ++i) {
@@ -62,7 +59,6 @@ public class GasolinaEstat {
             cisternes.add(aux);
         }
         fantasma = new Cisterna(estat.getFantasma());
-        benefici = estat.getBenefici();
         k = estat.k;
         v = estat.v;
     }
@@ -71,7 +67,16 @@ public class GasolinaEstat {
 
     public Cisterna getFantasma() { return fantasma; }
 
-    public double getBenefici() { return benefici; }
+    public double getBenefici() {
+        double benefici = 0.0;
+        for (int i = 0; i < cisternes.size(); i++){
+            for (int j = 1; j < getCisternaX(i).getRecorregut().size(); ++j) {
+                benefici -= 2 * calcularDistancia(getCisternaX(i).getPosicioRecorregut(j-1), getCisternaX(i).getPosicioRecorregut(j));
+                if (getCisternaX(i).getPosicioRecorregut(j).getDia() != -1) benefici += 1000 * ((100 - Math.pow(2.0, getCisternaX(i).getPosicioRecorregut(j).getDia())) / 100);
+            }
+        }
+        return benefici;
+    }
 
     public Cisterna getCisternaX(int i) {
         return cisternes.get(i);
@@ -143,75 +148,47 @@ public class GasolinaEstat {
 
     // Operadors
 
-    public boolean swapPetitions (Cisterna a, Cisterna b, int x , int y) {
-
-        if ( a.getPos().getCoordX() == -1 &&  a.getPos().getCoordY() == -1) {
-            double distB = b.getDist();
-            for (int i = 1; i < b.getRecorregut().size(); ++i) {
-                if ( i == x ) distB += calcularDistancia( b.getPosicioRecorregut(i-1), a.getPosicioRecorregut(x));
-                else if ( i == x+1 ) distB += calcularDistancia( a.getPosicioRecorregut(x), b.getPosicioRecorregut(i));
-                else distB += calcularDistancia( b.getPosicioRecorregut(i-1), b.getPosicioRecorregut(i));
-            }
-            if ( distB < k) {
-                int distBAux = 2 * (calcularDistancia( b.getPosicioRecorregut(y-1), b.getPosicioRecorregut(y)) + calcularDistancia( b.getPosicioRecorregut(y), b.getPosicioRecorregut(y+1)));
-                Posicio aux = new Posicio(a.getPosicioRecorregut(x));
-                a.setPosicioARecorregut(x, b.getPosicioRecorregut(y));
-                b.setPosicioARecorregut(y, aux);
-                b.setDist(distB);
-                benefici -= (distBAux);
-                distBAux = 2 * (calcularDistancia( b.getPosicioRecorregut(y-1), b.getPosicioRecorregut(y)) + calcularDistancia( b.getPosicioRecorregut(y), b.getPosicioRecorregut(y+1)));
-                benefici += (distBAux);
-                return true;
-            }
-            return false;
-        } else if ( b.getPos().getCoordX() == -1 &&  b.getPos().getCoordY() == -1) {
+    public void swapPetitions (Cisterna a, Cisterna b, int x , int y) {
+        if (b.getPos().getCoordX() == -1 && b.getPos().getCoordY() == -1) {
             double distA = a.getDist();
-            for (int i = 1; i < a.getRecorregut().size(); ++i) {
-                if ( i == x ) distA += calcularDistancia( a.getPosicioRecorregut(i-1), b.getPosicioRecorregut(y));
-                else if ( i == x+1 ) distA += calcularDistancia( b.getPosicioRecorregut(y), a.getPosicioRecorregut(i));
-                else distA += calcularDistancia( a.getPosicioRecorregut(i-1), a.getPosicioRecorregut(i));
+            distA -= calcularDistancia(a.getPosicioRecorregut(x - 1), a.getPosicioRecorregut(x));
+            distA += calcularDistancia(a.getPosicioRecorregut(x - 1), b.getPosicioRecorregut(y));
+            if (a.getRecorregut().size() - 1 != x) {
+                distA -= calcularDistancia(a.getPosicioRecorregut(x + 1), a.getPosicioRecorregut(x));
+                distA += calcularDistancia(b.getPosicioRecorregut(y), a.getPosicioRecorregut(x + 1));
             }
-            if ( distA < k) {
-                int distAAux = 2 * (calcularDistancia( a.getPosicioRecorregut(x-1), a.getPosicioRecorregut(x)) + calcularDistancia( a.getPosicioRecorregut(x), a.getPosicioRecorregut(x+1)));
-                Posicio aux = new Posicio(a.getPosicioRecorregut(x));
-                a.setPosicioARecorregut(x, b.getPosicioRecorregut(y));
-                b.setPosicioARecorregut(y, aux);
-                b.setDist(distA);
-                benefici -= (distAAux);
-                distAAux = 2 * (calcularDistancia( a.getPosicioRecorregut(x-1), a.getPosicioRecorregut(x)) + calcularDistancia( a.getPosicioRecorregut(x), a.getPosicioRecorregut(x+1)));
-                benefici += (distAAux);
-                return true;
-            }
-            return false;
-        } else {
-            double distA = a.getDist();
-            for (int i = 1; i < a.getRecorregut().size(); ++i) {
-                if (i == x) distA += calcularDistancia(a.getPosicioRecorregut(i - 1), b.getPosicioRecorregut(y));
-                else if (i == x + 1) distA += calcularDistancia(b.getPosicioRecorregut(y), a.getPosicioRecorregut(i));
-                else distA += calcularDistancia(a.getPosicioRecorregut(i - 1), a.getPosicioRecorregut(i));
-            }
-            double distB = b.getDist();
-            for (int i = 1; i < b.getRecorregut().size(); ++i) {
-                if (i == x) distB += calcularDistancia(b.getPosicioRecorregut(i - 1), a.getPosicioRecorregut(x));
-                else if (i == x + 1) distB += calcularDistancia(a.getPosicioRecorregut(x), b.getPosicioRecorregut(i));
-                else distB += calcularDistancia(b.getPosicioRecorregut(i - 1), b.getPosicioRecorregut(i));
-            }
-            if (distA <= k && distB <= k) {
-                int distAAux = 2 * (calcularDistancia(a.getPosicioRecorregut(x - 1), a.getPosicioRecorregut(x)) + calcularDistancia(a.getPosicioRecorregut(x), a.getPosicioRecorregut(x + 1)));
-                int distBAux = 2 * (calcularDistancia(b.getPosicioRecorregut(y - 1), b.getPosicioRecorregut(y)) + calcularDistancia(b.getPosicioRecorregut(y), b.getPosicioRecorregut(y + 1)));
-                Posicio aux = new Posicio(a.getPosicioRecorregut(x));
-                a.setPosicioARecorregut(x, b.getPosicioRecorregut(y));
-                b.setPosicioARecorregut(y, aux);
-                a.setDist(distA);
-                b.setDist(distB);
-                benefici -= (distAAux + distBAux);
-                distAAux = 2 * (calcularDistancia(a.getPosicioRecorregut(x - 1), a.getPosicioRecorregut(x)) + calcularDistancia(a.getPosicioRecorregut(x), a.getPosicioRecorregut(x + 1)));
-                distBAux = 2 * (calcularDistancia(b.getPosicioRecorregut(y - 1), b.getPosicioRecorregut(y)) + calcularDistancia(b.getPosicioRecorregut(y), b.getPosicioRecorregut(y + 1)));
-                benefici += (distAAux + distBAux);
-                return true;
-            }
-            return false;
+            Posicio aux = new Posicio(a.getPosicioRecorregut(x));
+            a.setPosicioARecorregut(x, b.getPosicioRecorregut(y));
+            b.setPosicioARecorregut(y, aux);
+            a.setDist(distA);
         }
+
+        else {
+
+            double distA = a.getDist();
+            distA -= calcularDistancia(a.getPosicioRecorregut(x - 1), a.getPosicioRecorregut(x));
+            distA += calcularDistancia(a.getPosicioRecorregut(x - 1), b.getPosicioRecorregut(y));
+            if (a.getRecorregut().size() - 1 != x) {
+                distA -= calcularDistancia(a.getPosicioRecorregut(x + 1), a.getPosicioRecorregut(x));
+                distA += calcularDistancia(b.getPosicioRecorregut(y), a.getPosicioRecorregut(x + 1));
+            }
+
+            double distB = b.getDist();
+            distB -= calcularDistancia(b.getPosicioRecorregut(y - 1), b.getPosicioRecorregut(y));
+            distB += calcularDistancia(b.getPosicioRecorregut(y - 1), a.getPosicioRecorregut(x));
+            if (b.getRecorregut().size() - 1 != y) {
+                distB -= calcularDistancia(b.getPosicioRecorregut(y + 1), b.getPosicioRecorregut(y));
+                distB += calcularDistancia(a.getPosicioRecorregut(x), b.getPosicioRecorregut(y + 1));
+            }
+
+            Posicio aux = new Posicio(a.getPosicioRecorregut(x));
+            a.setPosicioARecorregut(x, b.getPosicioRecorregut(y));
+            b.setPosicioARecorregut(y, aux);
+            a.setDist(distA);
+            b.setDist(distB);
+
+        }
+
     }
 
     public boolean afegirDesti (Cisterna a, Posicio x) {
@@ -224,8 +201,6 @@ public class GasolinaEstat {
                 a.setDist(d);
                 a.addPosicioARecorregut(a.getCentre());
                 a.addPosicioARecorregut(x);
-                benefici -= 2 * calcularDistancia( a.getPos() , a.getCentre()) + calcularDistancia(a.getCentre(), x);
-                benefici += 1000 * ((100 - Math.pow(2.0, x.getDia())) / 100);
                 fantasma.eliminaPosicio(x);
                 return true;
             }
@@ -245,8 +220,6 @@ public class GasolinaEstat {
                         a.setDist(d);
                         a.addPosicioARecorregut(x);
                     }
-                    benefici -= 2 * calcularDistancia(a.getPos(), x);
-                    if (x.getDia() != -1) benefici += 1000 * ((100 - Math.pow(2.0, x.getDia())) / 100);
                     fantasma.eliminaPosicio(x);
                     return true;
                 }
@@ -288,7 +261,7 @@ public class GasolinaEstat {
                 sortida = sortida + "       Posicio : " + j + "\n" + "       Coords de pes: " + cisternes.get(i).getPosicioRecorregut(j).getCoordX() + ',' + cisternes.get(i).getPosicioRecorregut(j).getCoordY() + "\n" + "       Dia pet: " + cisternes.get(i).getPosicioRecorregut(j).getDia() + "\n";
             }
         }
-        sortida = sortida + "\n" + " Benefici: " + benefici + "\n";
+        sortida = sortida + "\n" + " Benefici: " + getBenefici() + "\n";
         sortida = sortida + "\n" + " Peticions que no s'han fet: " + fantasma.getRecorregut().size() + "\n";
         return sortida;
     }
