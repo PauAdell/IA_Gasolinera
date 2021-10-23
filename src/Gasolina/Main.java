@@ -14,12 +14,12 @@ import java.util.Properties;
 public class Main {
 
     public static void main(String[] args) {
-        GasolinaEstat estat = new GasolinaEstat(5, 1234, 3, 2);
+        GasolinaEstat estat = new GasolinaEstat(100, 1234, 10, 1);
         //estat.generarEstatSolucio1();
         //estat.generarEstatSolucio2();
         //estat.imprimirEstat();
         GasolinaHillClimbingSearch(estat);
-        //estat.imprimirEstat();
+        estat.imprimirEstat();
         //GasolinaSimulatedAnnealingSearch(estat);
     }
 

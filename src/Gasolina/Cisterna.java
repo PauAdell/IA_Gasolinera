@@ -19,7 +19,7 @@ public class Cisterna {
         recorregut = new ArrayList<Posicio>();
         if (CoordX != -1 && CoordY != -1) recorregut.add(0, centre);
         dist = 0;
-        viatges = 0;
+        viatges = 1;
         tancs = 2;
         entregues = 0;
     }

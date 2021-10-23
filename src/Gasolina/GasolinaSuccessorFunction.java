@@ -24,24 +24,29 @@ public class GasolinaSuccessorFunction implements SuccessorFunction {
                     }
             }
 
+
             Cisterna aux = new Cisterna(e.getCisternaX(i));        // Cisterna i
 
             for (int j = 1; j < e.getCisternaX(i).getRecorregut().size()-1; ++j) {
                 GasolinaEstat nouEstat = new GasolinaEstat(e);
 
-
-                for (int k = 0; k < e.getCisternes().size(); ++k) {
-                    Cisterna aux2 = new Cisterna(nouEstat.getCisternaX(k));        // Cisterna k
-                    for (int h = 1; h < e.getCisternaX(k).getRecorregut().size()-1; ++h) {
-                        if (aux.getPosicioRecorregut(j).getDia() != -1 && aux2.getPosicioRecorregut(h).getDia() != -1) {
-                            if (nouEstat.swapPetitions(aux, aux2, j, h)) {
-                                String S = "Intercanvi entre Cisterna " + i + " i Cisterna " + j + nouEstat.toString();
-                                retVal.add(new Successor(S, nouEstat));
+                if (aux.getPosicioRecorregut(j).getDia() != -1) {
+                    for (int k = 0; k < nouEstat.getCisternes().size(); ++k) {
+                        Cisterna aux2 = new Cisterna(nouEstat.getCisternaX(k));        // Cisterna k
+                        if (aux != aux2) {
+                            for (int h = 1; h < nouEstat.getCisternaX(k).getRecorregut().size() - 1; ++h) {
+                                if (aux2.getPosicioRecorregut(h).getDia() != -1) {
+                                    if (nouEstat.swapPetitions(aux, aux2, j, h)) {
+                                        String S = "Intercanvi entre Cisterna " + i + " i Cisterna " + j + nouEstat.toString();
+                                        retVal.add(new Successor(S, nouEstat));
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
+
         }
         return retVal;
     }

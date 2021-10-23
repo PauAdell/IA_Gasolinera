@@ -107,7 +107,7 @@ public class GasolinaEstat {
                         }
                     } else {
                         double d = c.getDist() + calcularDistancia(c.getPos(), fantasma.getPosicioRecorregut(j));
-                        if (d <= k && c.getViatges() <= 5) {
+                        if (d <= k && c.getViatges() <= 4) {
                             benefAux -= 2 * calcularDistancia(c.getPos(), fantasma.getPosicioRecorregut(j));
                             benefAux += 1000 * ((100 - Math.pow(2.0, fantasma.getPosicioRecorregut(j).getDia())) / 100);
                             if (benefAux > benefMax) {
@@ -146,7 +146,7 @@ public class GasolinaEstat {
     public boolean swapPetitions (Cisterna a, Cisterna b, int x , int y) {
 
         if ( a.getPos().getCoordX() == -1 &&  a.getPos().getCoordY() == -1) {
-            int distB = 0;
+            double distB = b.getDist();
             for (int i = 1; i < b.getRecorregut().size(); ++i) {
                 if ( i == x ) distB += calcularDistancia( b.getPosicioRecorregut(i-1), a.getPosicioRecorregut(x));
                 else if ( i == x+1 ) distB += calcularDistancia( a.getPosicioRecorregut(x), b.getPosicioRecorregut(i));
@@ -165,7 +165,7 @@ public class GasolinaEstat {
             }
             return false;
         } else if ( b.getPos().getCoordX() == -1 &&  b.getPos().getCoordY() == -1) {
-            int distA = 0;
+            double distA = a.getDist();
             for (int i = 1; i < a.getRecorregut().size(); ++i) {
                 if ( i == x ) distA += calcularDistancia( a.getPosicioRecorregut(i-1), b.getPosicioRecorregut(y));
                 else if ( i == x+1 ) distA += calcularDistancia( b.getPosicioRecorregut(y), a.getPosicioRecorregut(i));
@@ -184,19 +184,19 @@ public class GasolinaEstat {
             }
             return false;
         } else {
-            int distA = 0;
+            double distA = a.getDist();
             for (int i = 1; i < a.getRecorregut().size(); ++i) {
                 if (i == x) distA += calcularDistancia(a.getPosicioRecorregut(i - 1), b.getPosicioRecorregut(y));
                 else if (i == x + 1) distA += calcularDistancia(b.getPosicioRecorregut(y), a.getPosicioRecorregut(i));
                 else distA += calcularDistancia(a.getPosicioRecorregut(i - 1), a.getPosicioRecorregut(i));
             }
-            int distB = 0;
+            double distB = b.getDist();
             for (int i = 1; i < b.getRecorregut().size(); ++i) {
                 if (i == x) distB += calcularDistancia(b.getPosicioRecorregut(i - 1), a.getPosicioRecorregut(x));
                 else if (i == x + 1) distB += calcularDistancia(a.getPosicioRecorregut(x), b.getPosicioRecorregut(i));
                 else distB += calcularDistancia(b.getPosicioRecorregut(i - 1), b.getPosicioRecorregut(i));
             }
-            if (distA < k && distB < k) {
+            if (distA <= k && distB <= k) {
                 int distAAux = 2 * (calcularDistancia(a.getPosicioRecorregut(x - 1), a.getPosicioRecorregut(x)) + calcularDistancia(a.getPosicioRecorregut(x), a.getPosicioRecorregut(x + 1)));
                 int distBAux = 2 * (calcularDistancia(b.getPosicioRecorregut(y - 1), b.getPosicioRecorregut(y)) + calcularDistancia(b.getPosicioRecorregut(y), b.getPosicioRecorregut(y + 1)));
                 Posicio aux = new Posicio(a.getPosicioRecorregut(x));
@@ -268,6 +268,7 @@ public class GasolinaEstat {
 
     public void imprimirEstat() {
         int comptador = 0;
+        /*
         for (int i = 0; i < cisternes.size(); ++i) {
             System.out.println("Cisterna: " + i);
             for (int j = 0; j < cisternes.get(i).getRecorregut().size(); ++j) {
@@ -275,6 +276,7 @@ public class GasolinaEstat {
             }
         }
         System.out.println("Benefici: " + benefici);
+        */
     }
 
     public String toString() {
@@ -287,6 +289,7 @@ public class GasolinaEstat {
             }
         }
         sortida = sortida + "\n" + " Benefici: " + benefici + "\n";
+        sortida = sortida + "\n" + " Peticions que no s'han fet: " + fantasma.getRecorregut().size() + "\n";
         return sortida;
     }
 
