@@ -17,8 +17,8 @@ public class Main {
         GasolinaEstat estat = new GasolinaEstat(100, 1234, 10, 1);
         estat.generarEstatSolucio1();
         //estat.imprimirEstat();
-        GasolinaHillClimbingSearch(estat);
-        estat.imprimirEstat();
+        //GasolinaHillClimbingSearch(estat);
+        //estat.imprimirEstat();
         //GasolinaSimulatedAnnealingSearch(estat);
     }
 

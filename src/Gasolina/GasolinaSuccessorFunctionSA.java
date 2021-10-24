@@ -27,7 +27,8 @@ public class GasolinaSuccessorFunctionSA implements SuccessorFunction {
 
             if (random.nextInt(2) == 0) {               // operador afegir
                 GasolinaEstat nouEstat = new GasolinaEstat(e);
-                if (nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(j))) {
+                nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(j));
+                if (nouEstat.getCisternaX(i).getDist() <= 640 && nouEstat.getCisternaX(i).getViatges() <= 5) {
                     String S = "Peticio Afegida: " + nouEstat.toString();
                     retVal.add(new Successor(S, nouEstat));
                 }
