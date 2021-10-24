@@ -9,17 +9,54 @@ import aima.search.informed.SimulatedAnnealingSearch;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Scanner;
 
 
 public class Main {
 
     public static void main(String[] args) {
+        /*
+        Scanner in = new Scanner(System.in);
+        System.out.println("------------ CERCA LOCAL ------------");
+        System.out.println("Per HC insereix 1 i per SA insereix 2");
+
+        int ops = 0;
+        while (ops != -1) {
+            ops = in.nextInt();
+            if (ops == 1) {
+
+                System.out.println("Per Heuristic1 insereix 1 i per Heuristic2 insereix 2");
+                ops = in.nextInt();
+                if (ops == 1) {
+                    GasolinaEstat estat = new GasolinaEstat(100, 1234, 10, 1);
+                    estat.generarEstatSolucio1();
+                    //estat.imprimirEstat();
+                    GasolinaHillClimbingSearch(estat);
+                    //estat.imprimirEstat();
+                    //GasolinaSimulatedAnnealingSearch(estat);
+                }
+
+                else {
+                    GasolinaEstat estat = new GasolinaEstat(100, 1234, 10, 1);
+                    estat.generarEstatSolucio1();
+                    //estat.imprimirEstat();
+                    GasolinaHillClimbingSearch(estat);
+                    //estat.imprimirEstat();
+                    //GasolinaSimulatedAnnealingSearch(estat);
+                }
+
+
+            }*/
+
         GasolinaEstat estat = new GasolinaEstat(100, 1234, 10, 1);
-        estat.generarEstatSolucio1();
+        //estat.generarEstatSolucio1();
         //estat.imprimirEstat();
         GasolinaHillClimbingSearch(estat);
-        estat.imprimirEstat();
+        //estat.imprimirEstat();
         //GasolinaSimulatedAnnealingSearch(estat);
+
+
+
     }
 
     // Funcions bàsiques necessaries per correr l'algorisme POTSER NECESSITEN ALGUNS CANVIS
@@ -28,7 +65,7 @@ public class Main {
         System.out.println("\nGasolina HillClimbing  -->");
 
         try {
-            Problem problem = new Problem(e, new GasolinaSuccessorFunction(), new GasolinatGoalTest(), new GasolinaHeuristic2());
+            Problem problem = new Problem(e, new GasolinaSuccessorFunction(), new GasolinatGoalTest(), new GasolinaHeuristic());
             Search search = new HillClimbingSearch();
             SearchAgent agent = new SearchAgent(problem, search);
             System.out.println();

@@ -71,6 +71,7 @@ public class GasolinaSuccessorFunctionSA implements SuccessorFunction {
             }
 
         }
+
         return retVal;
 
     }
