@@ -131,7 +131,36 @@ public class GasolinaEstat {
             }
 
             if (mesB != -1 && hiHaMillorsPeticions(millorsPeticions)) {
-                afegirDesti(cisternes.get(mesB), millorsPeticions.get(mesB));
+                if (getCisternaX(mesB).getTancs() == 0) {
+                    double d = getCisternaX(mesB).getDist() + calcularDistancia( getCisternaX(mesB).getPos() , getCisternaX(mesB).getCentre()) + calcularDistancia(getCisternaX(mesB).getCentre(), millorsPeticions.get(mesB));
+                    if (d <= k && getCisternaX(mesB).getViatges() < 5) {
+                        getCisternaX(mesB).setTancs(1);
+                        getCisternaX(mesB).setViatges(getCisternaX(mesB).getViatges() + 1);
+                        getCisternaX(mesB).setPos(millorsPeticions.get(mesB));
+                        getCisternaX(mesB).setDist(d);
+                        getCisternaX(mesB).addPosicioARecorregut(getCisternaX(mesB).getCentre());
+                        getCisternaX(mesB).addPosicioARecorregut(millorsPeticions.get(mesB));
+                        fantasma.eliminaPosicio(millorsPeticions.get(mesB));
+                    }
+
+                } else {
+                    double d = getCisternaX(mesB).getDist() + calcularDistancia(getCisternaX(mesB).getPos(), millorsPeticions.get(mesB));
+                    if (d <= k) {
+                        if (millorsPeticions.get(mesB).getCoordX() == getCisternaX(mesB).getCentre().getCoordX() && millorsPeticions.get(mesB).getCoordY() == getCisternaX(mesB).getCentre().getCoordY()) {
+                            getCisternaX(mesB).setTancs(2);
+                            getCisternaX(mesB).setViatges(getCisternaX(mesB).getViatges() + 1);
+                            getCisternaX(mesB).setPos(millorsPeticions.get(mesB));
+                            getCisternaX(mesB).setDist(d);
+                            getCisternaX(mesB).addPosicioARecorregut(millorsPeticions.get(mesB));
+                        } else {
+                            getCisternaX(mesB).setTancs(getCisternaX(mesB).getTancs() - 1);
+                            getCisternaX(mesB).setPos(millorsPeticions.get(mesB));
+                            getCisternaX(mesB).setDist(d);
+                            getCisternaX(mesB).addPosicioARecorregut(millorsPeticions.get(mesB));
+                        }
+                        fantasma.eliminaPosicio(millorsPeticions.get(mesB));
+                    }
+                }
             } else {
                 cisternesEsPodenMoure = false;
             }
@@ -191,39 +220,24 @@ public class GasolinaEstat {
 
     }
 
-    public boolean afegirDesti (Cisterna a, Posicio x) {
-        if (a.getTancs() == 0) {
-            double d = a.getDist() + calcularDistancia( a.getPos() , a.getCentre()) + calcularDistancia(a.getCentre(), x);
-            if (d <= k && a.getViatges() < 5) {
-                a.setTancs(1);
+    public void afegirDesti (Cisterna a, Posicio x) {
+        double d = a.getDist() + calcularDistancia(a.getPos(), x);
+        if (x.getDia() == -1) {
+            if (a.getCentre().getCoordX() == x.getCoordX() && a.getCentre().getCoordY() == x.getCoordY()) {
+                a.setTancs(2);
                 a.setViatges(a.getViatges() + 1);
                 a.setPos(x);
                 a.setDist(d);
-                a.addPosicioARecorregut(a.getCentre());
                 a.addPosicioARecorregut(x);
-                fantasma.eliminaPosicio(x);
-                return true;
             }
-            return false;
         } else {
-                double d = a.getDist() + calcularDistancia(a.getPos(), x);
-                if (d <= k) {
-                    if (x.getCoordX() == a.getCentre().getCoordX() && x.getCoordY() == a.getCentre().getCoordY()) {
-                        a.setTancs(2);
-                        a.setViatges(a.getViatges() + 1);
-                        a.setPos(x);
-                        a.setDist(d);
-                        a.addPosicioARecorregut(x);
-                    } else {
-                        a.setTancs(a.getTancs() - 1);
-                        a.setPos(x);
-                        a.setDist(d);
-                        a.addPosicioARecorregut(x);
-                    }
+                if (a.getTancs() != 0) {
+                    a.setTancs(a.getTancs() - 1);
+                    a.setPos(x);
+                    a.setDist(d);
+                    a.addPosicioARecorregut(x);
                     fantasma.eliminaPosicio(x);
-                    return true;
                 }
-        return false;
         }
     }
 
@@ -241,15 +255,14 @@ public class GasolinaEstat {
 
     public void imprimirEstat() {
         int comptador = 0;
-        /*
         for (int i = 0; i < cisternes.size(); ++i) {
             System.out.println("Cisterna: " + i);
             for (int j = 0; j < cisternes.get(i).getRecorregut().size(); ++j) {
                 System.out.println("Posicio : " + j + " Coords de pes: " + cisternes.get(i).getPosicioRecorregut(j).getCoordX() + ',' + cisternes.get(i).getPosicioRecorregut(j).getCoordY() + " Dia pet: " + cisternes.get(i).getPosicioRecorregut(j).getDia());
             }
         }
-        System.out.println("Benefici: " + benefici);
-        */
+        System.out.println("Benefici: " + getBenefici());
+
     }
 
     public String toString() {
@@ -264,6 +277,22 @@ public class GasolinaEstat {
         sortida = sortida + "\n" + " Benefici: " + getBenefici() + "\n";
         sortida = sortida + "\n" + " Peticions que no s'han fet: " + fantasma.getRecorregut().size() + "\n";
         return sortida;
+    }
+
+    public double calculDistCistACentres() {
+        double dist = 0;
+        for(int i = 0; i < cisternes.size(); ++i) {
+            dist += calcularDistancia(getCisternaX(i).getPos(), getCisternaX(i).getCentre());
+        }
+        return dist;
+    }
+
+    public double bonusPerAnarACentre() {
+        double bonus = 0;
+        for (int i = 0; i < cisternes.size(); ++i) {
+            if (getCisternaX(i).getPosicioRecorregut( getCisternaX(i).getRecorregut().size() - 1).getDia() == -1) bonus += 300;
+        }
+        return bonus;
     }
 
 }
