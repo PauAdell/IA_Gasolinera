@@ -15,9 +15,9 @@ public class Main {
 
     public static void main(String[] args) {
         GasolinaEstat estat = new GasolinaEstat(100, 1234, 10, 1);
-        estat.generarEstatSolucio1();
+        //estat.generarEstatSolucio1();
         //estat.imprimirEstat();
-        //GasolinaHillClimbingSearch(estat);
+        GasolinaHillClimbingSearch(estat);
         //estat.imprimirEstat();
         //GasolinaSimulatedAnnealingSearch(estat);
     }
@@ -28,7 +28,7 @@ public class Main {
         System.out.println("\nGasolina HillClimbing  -->");
 
         try {
-            Problem problem = new Problem(e, new GasolinaSuccessorFunction(), new GasolinatGoalTest(), new GasolinaHeuristic2());
+            Problem problem = new Problem(e, new GasolinaSuccessorFunction(), new GasolinatGoalTest(), new GasolinaHeuristic());
             Search search = new HillClimbingSearch();
             SearchAgent agent = new SearchAgent(problem, search);
             System.out.println();

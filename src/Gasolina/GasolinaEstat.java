@@ -131,8 +131,36 @@ public class GasolinaEstat {
             }
 
             if (mesB != -1 && hiHaMillorsPeticions(millorsPeticions)) {
-                // falta afegir les comprovacions que feiem abans a afegir desti per a que funcioni la solucio
-                afegirDesti(cisternes.get(mesB), millorsPeticions.get(mesB));
+                if (getCisternaX(mesB).getTancs() == 0) {
+                    double d = getCisternaX(mesB).getDist() + calcularDistancia( getCisternaX(mesB).getPos() , getCisternaX(mesB).getCentre()) + calcularDistancia(getCisternaX(mesB).getCentre(), millorsPeticions.get(mesB));
+                    if (d <= k && getCisternaX(mesB).getViatges() < 5) {
+                        getCisternaX(mesB).setTancs(1);
+                        getCisternaX(mesB).setViatges(getCisternaX(mesB).getViatges() + 1);
+                        getCisternaX(mesB).setPos(millorsPeticions.get(mesB));
+                        getCisternaX(mesB).setDist(d);
+                        getCisternaX(mesB).addPosicioARecorregut(getCisternaX(mesB).getCentre());
+                        getCisternaX(mesB).addPosicioARecorregut(millorsPeticions.get(mesB));
+                        fantasma.eliminaPosicio(millorsPeticions.get(mesB));
+                    }
+
+                } else {
+                    double d = getCisternaX(mesB).getDist() + calcularDistancia(getCisternaX(mesB).getPos(), millorsPeticions.get(mesB));
+                    if (d <= k) {
+                        if (millorsPeticions.get(mesB).getCoordX() == getCisternaX(mesB).getCentre().getCoordX() && millorsPeticions.get(mesB).getCoordY() == getCisternaX(mesB).getCentre().getCoordY()) {
+                            getCisternaX(mesB).setTancs(2);
+                            getCisternaX(mesB).setViatges(getCisternaX(mesB).getViatges() + 1);
+                            getCisternaX(mesB).setPos(millorsPeticions.get(mesB));
+                            getCisternaX(mesB).setDist(d);
+                            getCisternaX(mesB).addPosicioARecorregut(millorsPeticions.get(mesB));
+                        } else {
+                            getCisternaX(mesB).setTancs(getCisternaX(mesB).getTancs() - 1);
+                            getCisternaX(mesB).setPos(millorsPeticions.get(mesB));
+                            getCisternaX(mesB).setDist(d);
+                            getCisternaX(mesB).addPosicioARecorregut(millorsPeticions.get(mesB));
+                        }
+                        fantasma.eliminaPosicio(millorsPeticions.get(mesB));
+                    }
+                }
             } else {
                 cisternesEsPodenMoure = false;
             }
@@ -227,15 +255,14 @@ public class GasolinaEstat {
 
     public void imprimirEstat() {
         int comptador = 0;
-        /*
         for (int i = 0; i < cisternes.size(); ++i) {
             System.out.println("Cisterna: " + i);
             for (int j = 0; j < cisternes.get(i).getRecorregut().size(); ++j) {
                 System.out.println("Posicio : " + j + " Coords de pes: " + cisternes.get(i).getPosicioRecorregut(j).getCoordX() + ',' + cisternes.get(i).getPosicioRecorregut(j).getCoordY() + " Dia pet: " + cisternes.get(i).getPosicioRecorregut(j).getDia());
             }
         }
-        System.out.println("Benefici: " + benefici);
-        */
+        System.out.println("Benefici: " + getBenefici());
+
     }
 
     public String toString() {
