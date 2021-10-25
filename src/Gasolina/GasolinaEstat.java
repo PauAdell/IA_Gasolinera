@@ -78,6 +78,18 @@ public class GasolinaEstat {
         return benefici;
     }
 
+    public double getHeuristic() {
+        double benefici = 0.0;
+        for (int i = 0; i < cisternes.size(); i++){
+            for (int j = 1; j < getCisternaX(i).getRecorregut().size(); ++j) {
+                benefici -= 2 * calcularDistancia(getCisternaX(i).getPosicioRecorregut(j-1), getCisternaX(i).getPosicioRecorregut(j));
+                if (getCisternaX(i).getPosicioRecorregut(j).getDia() != -1) benefici += 1000 * ((100 - Math.pow(2.0, getCisternaX(i).getPosicioRecorregut(j).getDia())) / 100);
+                else if ( getCisternaX(i).getRecorregut().size() - 1 == j && getCisternaX(i).getPosicioRecorregut(j).getDia() == -1) benefici += 1000 * ((100 - Math.pow(2.0, getCisternaX(i).getPosicioRecorregut(j).getDia()+6)) / 100);
+            }
+        }
+        return benefici;
+    }
+
     public Cisterna getCisternaX(int i) {
         return cisternes.get(i);
     }
@@ -267,32 +279,16 @@ public class GasolinaEstat {
 
     public String toString() {
         String sortida = new String();
-
+        /*
         for (int i = 0; i < cisternes.size(); ++i) {
             sortida = sortida + " Cisterna: " + i + "\n";
             for (int j = 0; j < cisternes.get(i).getRecorregut().size(); ++j) {
                 sortida = sortida + "       Posicio : " + j + "\n" + "       Coords de pes: " + cisternes.get(i).getPosicioRecorregut(j).getCoordX() + ',' + cisternes.get(i).getPosicioRecorregut(j).getCoordY() + "\n" + "       Dia pet: " + cisternes.get(i).getPosicioRecorregut(j).getDia() + "\n";
             }
-        }
+        } */
         sortida = sortida + "\n" + " Benefici: " + getBenefici() + "\n";
         sortida = sortida + "\n" + " Peticions que no s'han fet: " + fantasma.getRecorregut().size() + "\n";
         return sortida;
-    }
-
-    public double calculDistCistACentres() {
-        double dist = 0;
-        for(int i = 0; i < cisternes.size(); ++i) {
-            dist += calcularDistancia(getCisternaX(i).getPos(), getCisternaX(i).getCentre());
-        }
-        return dist;
-    }
-
-    public double bonusPerAnarACentre() {
-        double bonus = 0;
-        for (int i = 0; i < cisternes.size(); ++i) {
-            if (getCisternaX(i).getPosicioRecorregut( getCisternaX(i).getRecorregut().size() - 1).getDia() == -1) bonus += 300;
-        }
-        return bonus;
     }
 
 }

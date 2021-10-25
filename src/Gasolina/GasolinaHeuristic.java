@@ -9,7 +9,7 @@ public class GasolinaHeuristic implements HeuristicFunction {
 
         GasolinaEstat estat = (GasolinaEstat) state;
 
-        return -1 * (estat.getBenefici() + estat.bonusPerAnarACentre());
+        return -1 * estat.getHeuristic();
 
     }
 }

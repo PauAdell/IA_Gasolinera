@@ -16,7 +16,30 @@ public class GasolinaSuccessorFunction implements SuccessorFunction {
         GasolinaEstat e = (GasolinaEstat) aState;
 
         for (int i = 0; i < e.getCisternes().size(); ++i) {
+
+            /*
+            if (e.getCisternaX(i).getTancs() == 0) {
+                GasolinaEstat nouEstat = new GasolinaEstat(e);
+                nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getCisternaX(i).getCentre());
+                if (nouEstat.getCisternaX(i).getDist() <= 640 && nouEstat.getCisternaX(i).getViatges() <= 5) {
+                    String S = "Centre Afegit: " + nouEstat.toString();
+                    retVal.add(new Successor(S, nouEstat));
+                }
+            } else {
+                for (int j = 0; j < e.getFantasma().getRecorregut().size(); ++j) {
+                    GasolinaEstat nouEstat = new GasolinaEstat(e);
+                    nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(j));
+                    if (nouEstat.getCisternaX(i).getDist() <= 640 && nouEstat.getCisternaX(i).getViatges() <= 5) {
+                        String S = "Peticio Afegida: " + nouEstat.toString();
+                        retVal.add(new Successor(S, nouEstat));
+                    }
+                }
+            }
+
+             */
+
             for (int j = 0; j < e.getFantasma().getRecorregut().size(); ++j) {
+
 
                     for (int m = 0; m < 2; ++m) {
                         if (m == 0) {
@@ -36,6 +59,8 @@ public class GasolinaSuccessorFunction implements SuccessorFunction {
                         }
                     }
             }
+
+
 
             Cisterna aux = new Cisterna(e.getCisternaX(i));        // Cisterna i
 
