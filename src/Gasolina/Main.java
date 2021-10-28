@@ -1,5 +1,7 @@
 package Gasolina;
 
+import IA.Gasolina.CentrosDistribucion;
+import IA.Gasolina.Gasolineras;
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
@@ -59,7 +61,9 @@ public class Main {
 
                 long start = System.currentTimeMillis();
 
-                GasolinaEstat e = new GasolinaEstat(nGasos, seed, nCentres, mult);
+                Gasolineras gaso = new Gasolineras(nGasos, seed);
+                CentrosDistribucion centres = new CentrosDistribucion(nCentres, mult, seed);
+                GasolinaEstat e = new GasolinaEstat(gaso, centres);
                 GasolinaHillClimbingSearch(e, heu);
                 if (solIni == 2) e.generarEstatSolucio1();
 
@@ -97,7 +101,9 @@ public class Main {
 
                 long start = System.currentTimeMillis();
 
-                GasolinaEstat e = new GasolinaEstat(nGasos, seed, nCentres, mult);
+                Gasolineras gaso = new Gasolineras(nGasos, seed);
+                CentrosDistribucion centres = new CentrosDistribucion(nCentres, mult, seed);
+                GasolinaEstat e = new GasolinaEstat(gaso, centres);
                 if (solIni == 2) e.generarEstatSolucio1();
                 GasolinaSimulatedAnnealingSearch(e, heu);
 
@@ -140,7 +146,7 @@ public class Main {
             SimulatedAnnealingSearch search = new SimulatedAnnealingSearch(2000, 100, 5, 0.001D);
             SearchAgent agent = new SearchAgent(problem, search);
             System.out.println();
-            printActions(agent.getActions());
+            //printActions(agent.getActions());
             printInstrumentation(agent.getInstrumentation());
         } catch (Exception var4) {
             var4.printStackTrace();

@@ -11,8 +11,6 @@ import java.util.*;
 
 public class GasolinaEstat {
 
-    public static Gasolineras gaso;
-    public static CentrosDistribucion centres;
     public static double k;
     public static int v;
 
@@ -20,11 +18,11 @@ public class GasolinaEstat {
 
     private ArrayList<Cisterna> cisternes;
 
-    public GasolinaEstat(int nGaso, int seed, int nCent, int mult) {
-        gaso = new Gasolineras(nGaso, seed);
-        centres = new CentrosDistribucion(nCent, mult, seed);
+    public GasolinaEstat(Gasolineras gaso, CentrosDistribucion centres) {
         k = 640;
         v = 5;
+        int nGaso = gaso.size();
+        int nCent = centres.size();
 
         cisternes = new ArrayList<Cisterna>(nCent);
         for (int i = 0; i < nCent; ++i) {
@@ -50,8 +48,6 @@ public class GasolinaEstat {
     }
 
     public GasolinaEstat(GasolinaEstat estat) {
-        gaso = estat.gaso;
-        centres = estat.centres;
         Cisterna aux;
         cisternes = new ArrayList<Cisterna>();
         for (int i = 0; i < estat.getCisternes().size(); ++i) {
