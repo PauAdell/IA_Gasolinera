@@ -30,7 +30,7 @@ public class GasolinaEstat {
         for (int i = 0; i < nCent; ++i) {
             Cisterna aux = new Cisterna(centres.get(i).getCoordX(), centres.get(i).getCoordX());
             cisternes.add( aux );
-            System.out.println("Centre: " + centres.get(i).getCoordX() + "," + centres.get(i).getCoordX());
+            //System.out.println("Centre: " + centres.get(i).getCoordX() + "," + centres.get(i).getCoordX());
         }
 
         fantasma = new Cisterna (-1, -1);
@@ -40,12 +40,12 @@ public class GasolinaEstat {
             for (int j = 0; j < gaso.get(i).getPeticiones().size(); ++j) {
                 Posicio aux = new Posicio(gaso.get(i).getCoordX(), gaso.get(i).getCoordY(), gaso.get(i).getPeticiones().get(j));
                 fantasma.addPosicioARecorregut(aux);
-                System.out.println("Posicio recorregut: " + comptador + " Coords de peticio: " + fantasma.getPosicioRecorregut(comptador).getCoordX() + ',' + fantasma.getPosicioRecorregut(comptador).getCoordY() + " Dia pet: " + fantasma.getPosicioRecorregut(comptador).getDia());
+                //System.out.println("Posicio recorregut: " + comptador + " Coords de peticio: " + fantasma.getPosicioRecorregut(comptador).getCoordX() + ',' + fantasma.getPosicioRecorregut(comptador).getCoordY() + " Dia pet: " + fantasma.getPosicioRecorregut(comptador).getDia());
                 //System.out.println("Peticio: " + aux.getCoordX() + "," + aux.getCoordY());
                 ++comptador;
             }
         }
-        System.out.println(fantasma.getRecorregut().size());
+        //System.out.println(fantasma.getRecorregut().size());
 
     }
 
