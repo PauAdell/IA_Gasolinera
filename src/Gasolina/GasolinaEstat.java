@@ -74,7 +74,7 @@ public class GasolinaEstat {
         return benefici;
     }
 
-    public double getHeuristic() {
+    public double getHeuristic1() {
         double benefici = 0.0;
         for (int i = 0; i < cisternes.size(); i++){
             for (int j = 1; j < getCisternaX(i).getRecorregut().size(); ++j) {
@@ -84,6 +84,10 @@ public class GasolinaEstat {
             }
         }
         return benefici;
+    }
+
+    public double getHeuristic2() {
+        return 0;
     }
 
     public Cisterna getCisternaX(int i) {

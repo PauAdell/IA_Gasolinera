@@ -14,10 +14,10 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        int seed = 0;
-        int nGasos = 0;
-        int nCentres = 0;
-        int mult = 1;
+        int seed;
+        int nGasos;
+        int nCentres;
+        int mult;
         int heu = 1;
 
         Scanner in = new Scanner(System.in);
@@ -146,8 +146,10 @@ public class Main {
             SimulatedAnnealingSearch search = new SimulatedAnnealingSearch(2000, 100, 5, 0.001D);
             SearchAgent agent = new SearchAgent(problem, search);
             System.out.println();
-            //printActions(agent.getActions());
+            GasolinaEstat o = (GasolinaEstat) search.getGoalState();
+            System.out.println("Benefici: " + o.getHeuristic1());
             printInstrumentation(agent.getInstrumentation());
+
         } catch (Exception var4) {
             var4.printStackTrace();
         }
