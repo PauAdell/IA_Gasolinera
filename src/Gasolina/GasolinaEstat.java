@@ -290,5 +290,4 @@ public class GasolinaEstat {
         sortida = sortida + "\n" + " Peticions que no s'han fet: " + fantasma.getRecorregut().size() + "\n";
         return sortida;
     }
-
 }

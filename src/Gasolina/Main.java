@@ -64,8 +64,8 @@ public class Main {
                 Gasolineras gaso = new Gasolineras(nGasos, seed);
                 CentrosDistribucion centres = new CentrosDistribucion(nCentres, mult, seed);
                 GasolinaEstat e = new GasolinaEstat(gaso, centres);
-                GasolinaHillClimbingSearch(e, heu);
                 if (solIni == 2) e.generarEstatSolucio1();
+                GasolinaHillClimbingSearch(e, heu);
 
                 long finish = System.currentTimeMillis();
 
