@@ -25,27 +25,29 @@ public class GasolinaSuccessorFunctionSA implements SuccessorFunction {
 
             if (rand == 0) {               // operador afegir
                 int i = random.nextInt(e.getCisternes().size());            // cisterna i
-                int p = random.nextInt(e.getFantasma().getRecorregut().size());
+                if (e.getFantasma().getRecorregut().size() > 0) {
+                    int p = random.nextInt(e.getFantasma().getRecorregut().size());
 
-                GasolinaEstat nouEstat = new GasolinaEstat(e);
+                    GasolinaEstat nouEstat = new GasolinaEstat(e);
 
-                if (e.getCisternaX(i).getTancs() == 0) {
-                    nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getCisternaX(i).getCentre());
-                    if (nouEstat.getCisternaX(i).getDist() <= 640 && nouEstat.getCisternaX(i).getViatges() <= 5) {
-                        String S = "Centre Afegit: " + nouEstat.toString();
-                        retVal.add(new Successor(S, nouEstat));
+                    if (e.getCisternaX(i).getTancs() == 0) {
+                        nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getCisternaX(i).getCentre());
+                        if (nouEstat.getCisternaX(i).getDist() <= 640 && nouEstat.getCisternaX(i).getViatges() <= 5) {
+                            String S = "Centre Afegit: " + nouEstat.toString();
+                            retVal.add(new Successor(S, nouEstat));
+                            System.out.println(nouEstat.getBenefici());
+                        }
+                    } else {
+                        nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(p));
+                        if (nouEstat.getCisternaX(i).getDist() <= 640 && nouEstat.getCisternaX(i).getViatges() <= 5) {
+                            String S = "Peticio Afegida: "; //+ nouEstat.toString();
+                            retVal.add(new Successor(S, nouEstat));
+                            System.out.println(nouEstat.getBenefici());
+                            operadorAplicat = true;
+                        }
                     }
-                }
-                else {
-                    nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(p));
-                    if (nouEstat.getCisternaX(i).getDist() <= 640 && nouEstat.getCisternaX(i).getViatges() <= 5) {
-                        String S = "Peticio Afegida: "; //+ nouEstat.toString();
-                        retVal.add(new Successor(S, nouEstat));
-                        System.out.println("Operador AFEGIRDESTI");
-                        operadorAplicat = true;
-                    }
-                }
 
+                }
             }
 
             else if (rand == 1) {                                       // operador swap entre cisternes
@@ -64,7 +66,7 @@ public class GasolinaSuccessorFunctionSA implements SuccessorFunction {
                         if (c1.getDist() <= 640 && c2.getDist() <= 640) {
                             String S = "Swap: "; //+ nouEstat.toString();
                             retVal.add(new Successor(S, nouEstat));
-                            System.out.println("Operador SWAP ENTRE CISTERNES");
+                            System.out.println(nouEstat.getBenefici());
                             operadorAplicat = true;
                         }
                         //else retVal.add(new Successor("No fa res", e));
@@ -89,7 +91,7 @@ public class GasolinaSuccessorFunctionSA implements SuccessorFunction {
                         String S = "Swap: "; //+ nouEstat.toString();
                         if (c1.getDist() <= 640) {
                             retVal.add(new Successor(S, nouEstat));
-                            System.out.println("Operador SWAP ENTRE CISTERNA I FANTASMA");
+                            System.out.println(nouEstat.getBenefici());
                             operadorAplicat = true;
                         } //else retVal.add(new Successor("No fa res", e));
                         //}
