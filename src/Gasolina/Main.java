@@ -47,16 +47,16 @@ public class Main {
                 if (ops == -1) seed = rand.nextInt();
                 else seed = ops;
 
-                System.out.println("Per generar la solucio inicial 2 insereix 2, altrament prem qualssevol boto per obtenir la solucio inicial 1");
+                System.out.println("Per generar la solucio inicial 1 prem qualssevol boto, per generar la solucio inicial 2 prem '2'");
                 int solIni = in.nextInt();
 
 
-                System.out.println("Per usar l'Heuristic 1 insereix 1, i per usar l'Heuristic 2 insereix '2'");
+                System.out.println("Per usar l'Heuristic 1 insereix '1', i per usar l'Heuristic 2 insereix '2'");
                 ops = in.nextInt();
                 while (ops != 1 && ops != 2) {
                     if (ops == 1) heu = 1;
                     else if (ops == 2) heu = 2;
-                    else System.out.println("Insereix 1 o 2");
+                    else System.out.println("Insereix '1' o '2'");
                 }
 
                 long start = System.currentTimeMillis();
@@ -88,7 +88,7 @@ public class Main {
                 if (s == -1) seed = rand.nextInt();
                 else seed = s;
 
-                System.out.println("Per generar la solucio inicial 2 insereix 2, altrament prem qualssevol boto per obtenir la solucio inicial 1");
+                System.out.println("Per generar la solucio inicial 1 prem qualssevol boto, per generar la solucio inicial 2 prem '2'");
                 int solIni = in.nextInt();
 
                 System.out.println("Per usar l'Heuristic 1 insereix 1, i per usar l'Heuristic 2 insereix '2'");
@@ -96,7 +96,7 @@ public class Main {
                 while (ops != 1 && ops != 2) {
                     if (ops == 1) heu = 1;
                     else if (ops == 2) heu = 2;
-                    else System.out.println("Insereix 1 o 2");
+                    else System.out.println("Insereix '1' o '2'");
                 }
 
                 long start = System.currentTimeMillis();
@@ -115,8 +115,6 @@ public class Main {
             }
         }
     }
-
-    // Funcions bàsiques necessaries per correr l'algorisme POTSER NECESSITEN ALGUNS CANVIS
 
     private static void GasolinaHillClimbingSearch(GasolinaEstat e, int heuristic) {
         System.out.println("\nGasolina HillClimbing  -->");
@@ -143,11 +141,9 @@ public class Main {
             Problem problem;
             if (heuristic == 1) problem = new Problem(e, new GasolinaSuccessorFunctionSA(), new GasolinatGoalTest(), new GasolinaHeuristic());
             else problem = new Problem(e, new GasolinaSuccessorFunctionSA(), new GasolinatGoalTest(), new GasolinaHeuristic2());
-            SimulatedAnnealingSearch search = new SimulatedAnnealingSearch(2000, 100, 5, 0.001D);
+            SimulatedAnnealingSearch search = new SimulatedAnnealingSearch(100, 10, 1, 0.001D);
             SearchAgent agent = new SearchAgent(problem, search);
             System.out.println();
-            GasolinaEstat o = (GasolinaEstat) search.getGoalState();
-            System.out.println("Benefici: " + o.getHeuristic1());
             printInstrumentation(agent.getInstrumentation());
 
         } catch (Exception var4) {

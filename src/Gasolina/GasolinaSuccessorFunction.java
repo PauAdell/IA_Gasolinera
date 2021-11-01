@@ -46,14 +46,16 @@ public class GasolinaSuccessorFunction implements SuccessorFunction {
                             GasolinaEstat nouEstat = new GasolinaEstat(e);
                             nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getCisternaX(i).getCentre());
                             if (nouEstat.getCisternaX(i).getDist() <= 640 && nouEstat.getCisternaX(i).getViatges() <= 5) {
-                                String S = "Peticio Afegida: " + nouEstat.toString();
+                                String S = "AFEGIR DESTI";
+                                S += "\n Cisterna " + i + " a posicio (" + nouEstat.getCisternaX(i).getCentre().getCoordX() + "," +  nouEstat.getCisternaX(i).getCentre().getCoordY() + ")" + nouEstat;
                                 retVal.add(new Successor(S, nouEstat));
                             }
                         } else {
                             GasolinaEstat nouEstat = new GasolinaEstat(e);
+                            String S = "AFEGIR DESTI";
+                            S += "\n Cisterna " + i + " a posicio (" + nouEstat.getFantasma().getPosicioRecorregut(j).getCoordX() + "," +  nouEstat.getFantasma().getPosicioRecorregut(j).getCoordY() + ")" + nouEstat;
                             nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(j));
                             if (nouEstat.getCisternaX(i).getDist() <= 640 && nouEstat.getCisternaX(i).getViatges() <= 5) {
-                                String S = "Peticio Afegida: " + nouEstat.toString();
                                 retVal.add(new Successor(S, nouEstat));
                             }
                         }
@@ -76,7 +78,8 @@ public class GasolinaSuccessorFunction implements SuccessorFunction {
                                 Cisterna c1 = nouEstat.getCisternaX(i);
                                 Cisterna c2 = nouEstat.getCisternaX(k);
                                 nouEstat.swapPetitions(c1, c2, j, h);
-                                String S = "Swap: " + nouEstat.toString();
+                                String S = "SWAP ENTRE CISTERNES";
+                                S += "\n Cisterna "+ i + " en posicio del recorregut " + j + " amb Cisterna " + k + " en posicio del recorregut " + h + nouEstat;
                                 if (c1.getDist() <= 640 && c2.getDist() <= 640)
                                     retVal.add(new Successor(S, nouEstat));
                             }
@@ -88,7 +91,8 @@ public class GasolinaSuccessorFunction implements SuccessorFunction {
                         Cisterna c1 = nouEstat.getCisternaX(i);
                         Cisterna c2 = nouEstat.getFantasma();
                         nouEstat.swapPetitions(c1, c2, j, k);
-                        String S = "Swap: " + nouEstat.toString();
+                        String S = "SWAP ENTRE CISTERNA I FATNASMA";
+                        S += "\n Cisterna "+ i + " en posicio del recorregut " + j + " amb Cisterna Fantasma en posicio del recorregut " + k + nouEstat;
                         if (c1.getDist() <= 640)
                             retVal.add(new Successor(S, nouEstat));
                     }

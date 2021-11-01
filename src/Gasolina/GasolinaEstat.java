@@ -18,6 +18,10 @@ public class GasolinaEstat {
 
     private ArrayList<Cisterna> cisternes;
 
+    ///////////////////
+    // CONSTRUCTORES //
+    ///////////////////
+
     public GasolinaEstat(Gasolineras gaso, CentrosDistribucion centres) {
         k = 640;
         v = 5;
@@ -28,7 +32,6 @@ public class GasolinaEstat {
         for (int i = 0; i < nCent; ++i) {
             Cisterna aux = new Cisterna(centres.get(i).getCoordX(), centres.get(i).getCoordX());
             cisternes.add( aux );
-            //System.out.println("Centre: " + centres.get(i).getCoordX() + "," + centres.get(i).getCoordX());
         }
 
         fantasma = new Cisterna (-1, -1);
@@ -38,12 +41,9 @@ public class GasolinaEstat {
             for (int j = 0; j < gaso.get(i).getPeticiones().size(); ++j) {
                 Posicio aux = new Posicio(gaso.get(i).getCoordX(), gaso.get(i).getCoordY(), gaso.get(i).getPeticiones().get(j));
                 fantasma.addPosicioARecorregut(aux);
-                //System.out.println("Posicio recorregut: " + comptador + " Coords de peticio: " + fantasma.getPosicioRecorregut(comptador).getCoordX() + ',' + fantasma.getPosicioRecorregut(comptador).getCoordY() + " Dia pet: " + fantasma.getPosicioRecorregut(comptador).getDia());
-                //System.out.println("Peticio: " + aux.getCoordX() + "," + aux.getCoordY());
                 ++comptador;
             }
         }
-        //System.out.println(fantasma.getRecorregut().size());
 
     }
 
@@ -58,6 +58,10 @@ public class GasolinaEstat {
         k = estat.k;
         v = estat.v;
     }
+
+    ///////////////////////
+    // GETTERS I SETTERS //
+    ///////////////////////
 
     public ArrayList getCisternes() { return cisternes; }
 
@@ -86,13 +90,13 @@ public class GasolinaEstat {
         return benefici;
     }
 
-    public double getHeuristic2() {
-        return 0;
-    }
-
     public Cisterna getCisternaX(int i) {
         return cisternes.get(i);
     }
+
+    ///////////////////////////////
+    // GENERADOR SOLUCIO INICIAL //
+    ///////////////////////////////
 
     public void generarEstatSolucio1() {
 
@@ -179,15 +183,9 @@ public class GasolinaEstat {
         }
     }
 
-    private boolean hiHaMillorsPeticions( ArrayList<Posicio> p) {
-        boolean aux = false;
-        for (int i = 0; i < p.size(); ++i) {
-            if (p.get(i).getCoordX() != -1 && p.get(i).getCoordY() != -1 && p.get(i).getDia() != -1) aux = true;
-        }
-        return aux;
-    }
-
-    // Operadors
+    ///////////////
+    // OPERADORS //
+    ///////////////
 
     public void swapPetitions (Cisterna a, Cisterna b, int x , int y) {
         if (b.getPos().getCoordX() == -1 && b.getPos().getCoordY() == -1) {
@@ -253,8 +251,9 @@ public class GasolinaEstat {
         }
     }
 
-
-    // Funcions Auxiliars
+    ////////////////////////
+    // FUNCIONS AUXILIARS //
+    ////////////////////////
 
     private int calcularDistancia(Posicio centre, Posicio gasolinera) {
 
@@ -263,6 +262,14 @@ public class GasolinaEstat {
 
         return coordX + coordY;
 
+    }
+
+    private boolean hiHaMillorsPeticions( ArrayList<Posicio> p) {
+        boolean aux = false;
+        for (int i = 0; i < p.size(); ++i) {
+            if (p.get(i).getCoordX() != -1 && p.get(i).getCoordY() != -1 && p.get(i).getDia() != -1) aux = true;
+        }
+        return aux;
     }
 
     public void imprimirEstat() {
@@ -279,13 +286,6 @@ public class GasolinaEstat {
 
     public String toString() {
         String sortida = new String();
-        /*
-        for (int i = 0; i < cisternes.size(); ++i) {
-            sortida = sortida + " Cisterna: " + i + "\n";
-            for (int j = 0; j < cisternes.get(i).getRecorregut().size(); ++j) {
-                sortida = sortida + "       Posicio : " + j + "\n" + "       Coords de pes: " + cisternes.get(i).getPosicioRecorregut(j).getCoordX() + ',' + cisternes.get(i).getPosicioRecorregut(j).getCoordY() + "\n" + "       Dia pet: " + cisternes.get(i).getPosicioRecorregut(j).getDia() + "\n";
-            }
-        } */
         sortida = sortida + "\n" + " Benefici: " + getBenefici() + "\n";
         sortida = sortida + "\n" + " Peticions que no s'han fet: " + fantasma.getRecorregut().size() + "\n";
         return sortida;

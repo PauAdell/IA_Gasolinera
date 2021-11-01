@@ -18,7 +18,6 @@ public class GasolinaSuccessorFunctionSA implements SuccessorFunction {
 
         boolean operadorAplicat = false;
 
-        //new Succesor("No fa res", e)
         while (!operadorAplicat) {
 
             int rand = random.nextInt(3);
@@ -33,16 +32,18 @@ public class GasolinaSuccessorFunctionSA implements SuccessorFunction {
                     if (e.getCisternaX(i).getTancs() == 0) {
                         nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getCisternaX(i).getCentre());
                         if (nouEstat.getCisternaX(i).getDist() <= 640 && nouEstat.getCisternaX(i).getViatges() <= 5) {
-                            String S = "Centre Afegit: " + nouEstat.toString();
+                            String S = "AFEGIR DESTI";
+                            S += "\n Cisterna " + i + " a posicio (" + nouEstat.getCisternaX(i).getCentre().getCoordX() + "," +  nouEstat.getCisternaX(i).getCentre().getCoordY() + ")" + nouEstat;
+                            System.out.println(S);
                             retVal.add(new Successor(S, nouEstat));
-                            System.out.println(nouEstat.getBenefici());
                         }
                     } else {
+                        String S = "AFEGIR DESTI";
+                        S += "\n Cisterna " + i + " a posicio (" + nouEstat.getFantasma().getPosicioRecorregut(p).getCoordX() + "," +  nouEstat.getFantasma().getPosicioRecorregut(p).getCoordY() + ")" + nouEstat;
                         nouEstat.afegirDesti(nouEstat.getCisternaX(i), nouEstat.getFantasma().getPosicioRecorregut(p));
                         if (nouEstat.getCisternaX(i).getDist() <= 640 && nouEstat.getCisternaX(i).getViatges() <= 5) {
-                            String S = "Peticio Afegida: "; //+ nouEstat.toString();
                             retVal.add(new Successor(S, nouEstat));
-                            System.out.println(nouEstat.getBenefici());
+                            System.out.println(S);
                             operadorAplicat = true;
                         }
                     }
@@ -57,22 +58,19 @@ public class GasolinaSuccessorFunctionSA implements SuccessorFunction {
                 int k = random.nextInt(e.getCisternaX(i).getRecorregut().size());
                 int h = random.nextInt(e.getCisternaX(j).getRecorregut().size());
 
-                //if (e.getCisternaX(i).getRecorregut().size() > 0 && e.getCisternaX(j).getRecorregut().size() > 0) {
-                    if (e.getCisternaX(i).getPosicioRecorregut(k).getDia() != -1 && e.getCisternaX(j).getPosicioRecorregut(h).getDia() != -1) {
-                        GasolinaEstat nouEstat = new GasolinaEstat(e);
-                        Cisterna c1 = nouEstat.getCisternaX(i);
-                        Cisterna c2 = nouEstat.getCisternaX(j);
-                        nouEstat.swapPetitions(c1, c2, k, h);
-                        if (c1.getDist() <= 640 && c2.getDist() <= 640) {
-                            String S = "Swap: "; //+ nouEstat.toString();
-                            retVal.add(new Successor(S, nouEstat));
-                            System.out.println(nouEstat.getBenefici());
-                            operadorAplicat = true;
-                        }
-                        //else retVal.add(new Successor("No fa res", e));
+                if (e.getCisternaX(i).getPosicioRecorregut(k).getDia() != -1 && e.getCisternaX(j).getPosicioRecorregut(h).getDia() != -1) {
+                    GasolinaEstat nouEstat = new GasolinaEstat(e);
+                    Cisterna c1 = nouEstat.getCisternaX(i);
+                    Cisterna c2 = nouEstat.getCisternaX(j);
+                    nouEstat.swapPetitions(c1, c2, k, h);
+                    if (c1.getDist() <= 640 && c2.getDist() <= 640) {
+                        String S = "SWAP ENTRE CISTERNES";
+                        S += "\n Cisterna "+ i + " en posicio del recorregut " + j + " amb Cisterna " + k + " en posicio del recorregut " + h + nouEstat;
+                        retVal.add(new Successor(S, nouEstat));
+                        System.out.println(nouEstat.getBenefici());
+                        operadorAplicat = true;
                     }
-                    //else retVal.add(new Successor("No fa res", e));
-                //}
+                }
             }
 
             else {                                                              // operador swap entre cisterna i fantasma
@@ -83,19 +81,18 @@ public class GasolinaSuccessorFunctionSA implements SuccessorFunction {
                     int pf = random.nextInt(e.getFantasma().getRecorregut().size());
 
                     if (e.getCisternaX(i).getPosicioRecorregut(pi).getDia() != -1) {
-                        //if (e.getCisternaX(i).getRecorregut().size() > 0) {
+
                         GasolinaEstat nouEstat = new GasolinaEstat(e);
                         Cisterna c1 = nouEstat.getCisternaX(i);
                         Cisterna c2 = nouEstat.getFantasma();
                         nouEstat.swapPetitions(c1, c2, pi, pf);
-                        String S = "Swap: "; //+ nouEstat.toString();
                         if (c1.getDist() <= 640) {
+                            String S = "SWAP ENTRE CISTERNA I FATNASMA";
+                            S += "\n Cisterna "+ i + " en posicio del recorregut " + pi + " amb Cisterna Fantasma en posicio del recorregut " + pf + nouEstat;
                             retVal.add(new Successor(S, nouEstat));
-                            System.out.println(nouEstat.getBenefici());
+                            System.out.println(S);
                             operadorAplicat = true;
-                        } //else retVal.add(new Successor("No fa res", e));
-                        //}
-                        //else retVal.add(new Successor("No fa res", e));
+                        }
                     }
                 }
             }
