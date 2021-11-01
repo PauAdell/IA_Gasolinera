@@ -13,6 +13,10 @@ public class Cisterna {
 
     private int entregues;
 
+    ///////////////
+    // CREADORES //
+    ///////////////
+
     public Cisterna( int CoordX, int CoordY) {
         pos = new Posicio( CoordX, CoordY, -1);
         centre = new Posicio( CoordX, CoordY, -1);
@@ -38,6 +42,10 @@ public class Cisterna {
         this.tancs = c.tancs;
         this.entregues = c.entregues;
     }
+
+    ///////////////////////
+    // GETTERS I SETTERS //
+    ///////////////////////
 
     public double getDist() {
         return this.dist;
